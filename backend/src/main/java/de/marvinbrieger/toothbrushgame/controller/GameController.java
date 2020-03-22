@@ -30,7 +30,7 @@ public class GameController {
     @PostMapping("/games")
     Game createGame(@RequestBody Game game) {
 
-        game.setGameCode(GameCodeService.getRandomIdentifier(6));
+        game.setGameCode("alkjdfasdf");
         return gameRepository.save(game);
     }
 
