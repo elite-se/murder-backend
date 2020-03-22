@@ -21,7 +21,7 @@ public class GameController {
                 .orElseThrow(() -> new GameNotFoundExeception(id));
     }
 
-    @GetMapping("/games/{gameCode}")
+    @GetMapping("/games/code_{gameCode}")
     Game getOne(@PathVariable String gameCode) {
         return gameRepository.findByGameCode(gameCode)
                 .orElseThrow(() -> new GameNotFoundExeception(gameCode));
@@ -29,8 +29,6 @@ public class GameController {
 
     @PostMapping("/games")
     Game createGame(@RequestBody Game game) {
-
-        game.setGameCode("alkjdfasdf");
         return gameRepository.save(game);
     }
 
