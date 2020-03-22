@@ -6,6 +6,8 @@ import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.services.GameCodeService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 public class GameController {
 
@@ -15,13 +17,18 @@ public class GameController {
         this.gameRepository = gameRepository;
     }
 
-    @GetMapping("/games/{id}")
+    @GetMapping("/games")
+    Collection<Game> getAll() {
+        return gameRepository.findAll();
+    }
+
+    @GetMapping("/games/{id:[0-9]+}")
     Game getOne(@PathVariable Long id) {
         return gameRepository.findById(id)
                 .orElseThrow(() -> new GameNotFoundExeception(id));
     }
 
-    @GetMapping("/games/{gameCode}")
+    @GetMapping("/games/{gameCode:[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*}")
     Game getOne(@PathVariable String gameCode) {
         return gameRepository.findByGameCode(gameCode)
                 .orElseThrow(() -> new GameNotFoundExeception(gameCode));
@@ -29,8 +36,6 @@ public class GameController {
 
     @PostMapping("/games")
     Game createGame(@RequestBody Game game) {
-
-        game.setGameCode("alkjdfasdf");
         return gameRepository.save(game);
     }
 
