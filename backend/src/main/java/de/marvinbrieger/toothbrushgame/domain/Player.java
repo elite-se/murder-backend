@@ -18,8 +18,4 @@ public class Player {
     @Size(min = 3)
     private String playerName;
 
-    public Player(String playerName) {
-        this.playerName = playerName;
-    }
-
 }

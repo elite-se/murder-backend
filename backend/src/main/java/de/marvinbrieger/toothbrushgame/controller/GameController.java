@@ -13,32 +13,57 @@ public class GameController {
 
     private final GameRepository gameRepository;
 
-    GameController(GameRepository gameRepository) {
+    private final GameCodeService gameCodeService;
+
+    GameController(GameRepository gameRepository, GameCodeService gameCodeService) {
         this.gameRepository = gameRepository;
+        this.gameCodeService = gameCodeService;
     }
 
-    @GetMapping("/games")
-    Collection<Game> getAll() {
-        return gameRepository.findAll();
-    }
-
+    /**
+     * Is used to get game information by id.
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/games/{id:[0-9]+}")
     Game getOne(@PathVariable Long id) {
         return gameRepository.findById(id)
                 .orElseThrow(() -> new GameNotFoundExeception(id));
     }
 
+    /**
+     * Is used to get game information by gameCode.
+     *
+     * @param gameCode
+     * @return
+     */
     @GetMapping("/games/{gameCode:[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*}")
     Game getOne(@PathVariable String gameCode) {
         return gameRepository.findByGameCode(gameCode)
                 .orElseThrow(() -> new GameNotFoundExeception(gameCode));
     }
 
+    /**
+     * Is used to create a new game.
+     *
+     * The player of the game administrator is created along with the game.
+     *
+     * @param game
+     * @return
+     */
     @PostMapping("/games")
     Game createGame(@RequestBody Game game) {
+        String gameCode = gameCodeService.getNewGameCode();
+        game.setGameCode(gameCode);
         return gameRepository.save(game);
     }
 
+    /**
+     * Is used to abort a game.
+     *
+     * @param id
+     */
     @DeleteMapping("/games/{id}")
     void abortGame(@PathVariable Long id) {
 
