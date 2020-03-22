@@ -11,4 +11,4 @@ Please create a new branch for each user story you like to implement. Name the b
 ## Commit naming
 
 Please name your commits with the issue number preciding. For example a commit to the issue MUR-1 could be named:
-"MUR-1: Created game code service"
+"MUR-1: Create game code service"
