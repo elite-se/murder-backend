@@ -56,6 +56,12 @@ public class GameController {
     Game createGame(@RequestBody Game game) {
         String gameCode = gameCodeService.getNewGameCode();
         game.setGameCode(gameCode);
+
+        game.setDeleted(false); // api user could never create a deleted game
+        game.setPlayers(null); // api user could not add players
+
+        game.getOwner().setGame(game); // the creator is also player in the game
+
         return gameRepository.save(game);
     }
 

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  *
@@ -28,5 +29,8 @@ public class Game {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Player owner;
+
+    @OneToMany
+    private List<Player> players;
 
 }
