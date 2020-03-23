@@ -19,8 +19,7 @@ public class Player {
     private Long id;
 
     @JsonIgnore // avoids infinity loops
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @ManyToOne
     private Game game;
 
     @Size(min = 3)

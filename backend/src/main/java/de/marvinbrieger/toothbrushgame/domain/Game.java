@@ -30,7 +30,7 @@ public class Game {
     @OneToOne(cascade = CascadeType.ALL)
     private Player owner;
 
-    @OneToMany
+    @OneToMany(mappedBy = "game")
     private List<Player> players;
 
 }
