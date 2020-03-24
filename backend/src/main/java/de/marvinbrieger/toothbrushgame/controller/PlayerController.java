@@ -2,6 +2,7 @@ package de.marvinbrieger.toothbrushgame.controller;
 
 import com.querydsl.core.types.Predicate;
 import de.marvinbrieger.toothbrushgame.controller.exceptions.GameNotFoundExeception;
+import de.marvinbrieger.toothbrushgame.controller.exceptions.PlayerAlreadyExistsException;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.domain.Player;
 import de.marvinbrieger.toothbrushgame.domain.QPlayer;
@@ -37,6 +38,9 @@ public class PlayerController {
     Player joinGame(@PathVariable Long gameId, @RequestBody Player player) {
         Game gameToJoin = gameRepository.findById(gameId)
                 .orElseThrow(() -> new GameNotFoundExeception(gameId));
+
+        if (playerRepository.existsByGame_Id(gameId))
+            throw new PlayerAlreadyExistsException(player.getPlayerName());
 
         player.setGame(gameToJoin);
         return playerRepository.save(player);
