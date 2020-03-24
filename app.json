@@ -1,0 +1,25 @@
+{
+  "name": "MurderGame backend",
+  "description": "API for the murder game app",
+  "repository": "https://github.com/aiquita/murder-backend",
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev"
+    }
+  ],
+  "image": "heroku/java",
+  "buildpacks": [
+    {
+      "url": "https://github.com/timanovsky/subdir-heroku-buildpack"
+    },
+    {
+      "url": "heroku/java"
+    }
+  ],
+  "env": {
+    "PROJECT_PATH": {
+      "description": "Path to the project root, containing Procfile, pom.xml etc. Used by the subdir buildpack.",
+      "value": "backend"
+    }
+  }
+}
