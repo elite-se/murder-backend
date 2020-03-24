@@ -2,6 +2,7 @@ package de.marvinbrieger.toothbrushgame.controller;
 
 import de.marvinbrieger.toothbrushgame.controller.exceptions.GameNotFoundExeception;
 import de.marvinbrieger.toothbrushgame.domain.Game;
+import de.marvinbrieger.toothbrushgame.domain.GameStatus;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.services.GameCodeService;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +58,7 @@ public class GameController {
 
         game.setDeleted(false); // api user could never create a deleted game
         game.setPlayers(null); // api user could not add players
+        game.setGameStatus(GameStatus.PREPERATION);
 
         game.getOwner().setGame(game); // the creator is also player in the game
 
