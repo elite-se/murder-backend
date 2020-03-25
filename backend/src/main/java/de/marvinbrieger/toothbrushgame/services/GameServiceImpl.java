@@ -28,7 +28,11 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.controll
 
     @Override
     public Game getGameByGameCode(String gameCode) {
-        BooleanExpression pred = QGame.game.gameCode.eq(gameCode).and(QGame.game.deleted.isFalse());
+        BooleanExpression pred = QGame
+                .game.gameCode.eq(gameCode)
+                .and(QGame.game
+                        .gameStatus.ne(GameStatus.FINISHED));
+
         return gameRepository.findOne(pred)
                 .orElseThrow(() -> new GameNotFoundExeception(gameCode));
     }
@@ -38,7 +42,6 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.controll
         String gameCode = gameCodeService.getNewGameCode();
         game.setGameCode(gameCode);
 
-        game.setDeleted(false); // api user could never create a deleted game
         game.setPlayers(null); // api user could not add players
         game.setGameStatus(GameStatus.PREPARATION);
 

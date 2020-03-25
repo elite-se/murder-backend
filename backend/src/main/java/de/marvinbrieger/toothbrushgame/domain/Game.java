@@ -18,8 +18,6 @@ public class Game {
     @GeneratedValue
     private Long id;
 
-    private boolean deleted;
-
     @Size(min = 3)
     private String title;
 

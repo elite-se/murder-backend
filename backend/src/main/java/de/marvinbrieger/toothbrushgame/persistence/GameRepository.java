@@ -11,6 +11,4 @@ public interface GameRepository extends JpaRepository<Game, Long>, QuerydslPredi
 
     Optional<Game> findByIdAndGameStatus(Long id, GameStatus gameStatus);
 
-    boolean existsGameByGameCode(String gameCode);
-
 }

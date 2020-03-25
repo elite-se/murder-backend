@@ -15,7 +15,7 @@ public class GameNotFoundExeception extends RuntimeException {
     }
 
     public GameNotFoundExeception(Long id, GameStatus destState) {
-        super("Could not find game " + id + " or game is not in the state " + destState.getPredGameStatus());
+        super("Could not find game " + id + " or game is not in the state " + destState);
     }
 
 }
