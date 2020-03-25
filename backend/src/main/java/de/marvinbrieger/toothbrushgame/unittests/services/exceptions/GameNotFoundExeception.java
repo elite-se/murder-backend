@@ -1,8 +1,6 @@
-package de.marvinbrieger.toothbrushgame.services.exceptions;
+package de.marvinbrieger.toothbrushgame.unittests.services.exceptions;
 
 import de.marvinbrieger.toothbrushgame.domain.GameStatus;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 public class GameNotFoundExeception extends RuntimeException {
 

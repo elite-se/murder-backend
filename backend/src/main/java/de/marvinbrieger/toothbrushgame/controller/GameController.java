@@ -1,13 +1,7 @@
 package de.marvinbrieger.toothbrushgame.controller;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import de.marvinbrieger.toothbrushgame.controller.interfaces.GameService;
-import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundExeception;
 import de.marvinbrieger.toothbrushgame.domain.Game;
-import de.marvinbrieger.toothbrushgame.domain.GameStatus;
-import de.marvinbrieger.toothbrushgame.domain.QGame;
-import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
-import de.marvinbrieger.toothbrushgame.services.GameCodeService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

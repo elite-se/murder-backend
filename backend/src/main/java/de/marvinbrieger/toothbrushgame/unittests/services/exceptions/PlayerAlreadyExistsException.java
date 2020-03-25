@@ -1,6 +1,4 @@
-package de.marvinbrieger.toothbrushgame.services.exceptions;
-
-import de.marvinbrieger.toothbrushgame.domain.Player;
+package de.marvinbrieger.toothbrushgame.unittests.services.exceptions;
 
 public class PlayerAlreadyExistsException extends RuntimeException {
 
