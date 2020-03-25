@@ -6,6 +6,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 public interface PlayerRepository extends JpaRepository<Player, Long>, QuerydslPredicateExecutor<Player> {
 
-    boolean existsByGame_Id(Long id);
+    boolean existsByGame_IdAndPlayerName(Long id, String playerName);
 
 }

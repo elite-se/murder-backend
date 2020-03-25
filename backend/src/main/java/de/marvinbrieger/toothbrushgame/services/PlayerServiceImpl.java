@@ -29,7 +29,7 @@ public class PlayerServiceImpl implements PlayerService {
         Game gameToJoin = gameRepository.findById(gameId)
                 .orElseThrow(() -> new GameNotFoundExeception(gameId));
 
-        if (playerRepository.existsByGame_Id(gameId))
+        if (playerRepository.existsByGame_IdAndPlayerName(gameId, player.getPlayerName()))
             throw new PlayerAlreadyExistsException(player.getPlayerName());
 
         player.setGame(gameToJoin);

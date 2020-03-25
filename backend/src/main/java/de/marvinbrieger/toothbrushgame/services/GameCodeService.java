@@ -1,5 +1,7 @@
 package de.marvinbrieger.toothbrushgame.services;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import de.marvinbrieger.toothbrushgame.domain.GameStatus;
 import de.marvinbrieger.toothbrushgame.domain.QGame;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.NoGameCodeAvailableException;
@@ -47,13 +49,15 @@ public class GameCodeService {
     public String getNewGameCode() {
         for (int failCount = 0; failCount < FAILURE_THRESHOLD; failCount++) {
             String gameCode = getRandomIdentifier(GAME_CODE_LENGTH);
-            if (gameRepository.exists(QGame.game.gameCode.eq(gameCode)
-                    .and(QGame.game.deleted.isFalse()))) {
+            BooleanExpression pred = QGame
+                    .game.gameCode.eq(gameCode)
+                    .and(QGame.game
+                            .gameStatus.ne(GameStatus.FINISHED));
 
+            if (gameRepository.exists(pred))
                 failCount++;
-            } else {
+            else
                 return gameCode;
-            }
         }
         throw new NoGameCodeAvailableException();
     }
