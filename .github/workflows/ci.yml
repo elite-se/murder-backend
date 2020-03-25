@@ -1,0 +1,29 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+
+  static-checks:
+    name: Static code analysis
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use OpenJDK 13
+      uses: actions/setup-java@v1
+      with:
+        java-version: '13'
+    - uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - uses: harmon758/postgresql-action@v1
+      with:
+        postgresql db: 'murdergame'
+        postgresql user: 'murdergame'
+        postgresql password: 'murdergame'
+    - name: Compile, test and verify
+      working-directory: ./backend
+      run: ./mvnw -q -Dspring.datasource.url="jdbc:postgresql://localhost:5432/murdergame" -Dspring.datasource.username="murdergame" -Dspring.datasource.password="murdergame" verify

@@ -1,7 +1,11 @@
 package de.marvinbrieger.toothbrushgame.controller;
 
-import de.marvinbrieger.toothbrushgame.controller.exceptions.GameNotFoundExeception;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import de.marvinbrieger.toothbrushgame.controller.interfaces.GameService;
+import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundExeception;
 import de.marvinbrieger.toothbrushgame.domain.Game;
+import de.marvinbrieger.toothbrushgame.domain.GameStatus;
+import de.marvinbrieger.toothbrushgame.domain.QGame;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.services.GameCodeService;
 import org.springframework.web.bind.annotation.*;
@@ -9,68 +13,65 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class GameController {
 
-    private final GameRepository gameRepository;
+    private final GameService gameService;
 
-    private final GameCodeService gameCodeService;
-
-    GameController(GameRepository gameRepository, GameCodeService gameCodeService) {
-        this.gameRepository = gameRepository;
-        this.gameCodeService = gameCodeService;
+    GameController(GameService gameService) {
+        this.gameService = gameService;
     }
 
     /**
-     * Is used to get game information by id.
+     * @see GameService
      *
      * @param id
      * @return
      */
     @GetMapping("/games/{id:[0-9]+}")
-    Game getOne(@PathVariable Long id) {
-        return gameRepository.findById(id)
-                .orElseThrow(() -> new GameNotFoundExeception(id));
+    Game getGameById(@PathVariable Long id) {
+        return gameService.getGameById(id);
     }
 
     /**
-     * Is used to get game information by gameCode.
+     * @see GameService
      *
      * @param gameCode
      * @return
      */
     @GetMapping("/games/{gameCode:[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*}")
-    Game getOne(@PathVariable String gameCode) {
-        return gameRepository.findByGameCode(gameCode)
-                .orElseThrow(() -> new GameNotFoundExeception(gameCode));
+    Game getGameByGameCode(@PathVariable String gameCode) {
+        return gameService.getGameByGameCode(gameCode);
     }
 
     /**
-     * Is used to create a new game.
-     *
-     * The player of the game administrator is created along with the game.
+     * @see GameService
      *
      * @param game
      * @return
      */
     @PostMapping("/games")
     Game createGame(@RequestBody Game game) {
-        String gameCode = gameCodeService.getNewGameCode();
-        game.setGameCode(gameCode);
-
-        game.setDeleted(false); // api user could never create a deleted game
-        game.setPlayers(null); // api user could not add players
-
-        game.getOwner().setGame(game); // the creator is also player in the game
-
-        return gameRepository.save(game);
+        return gameService.createGame(game);
     }
 
     /**
-     * Is used to abort a game.
+     * @see GameService
      *
      * @param id
+     * @return
      */
-    @DeleteMapping("/games/{id}")
-    void abortGame(@PathVariable Long id) {
+    @PutMapping("/games/{id}/start")
+    Game startGame(@PathVariable Long id) {
+        return gameService.startGame(id);
+    }
 
+    /**
+     * @see GameService
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping("/games/{id}/end")
+    Game endGame(@PathVariable Long id) {
+        return gameService.endGame(id);
     }
 
 }

@@ -3,6 +3,7 @@ package de.marvinbrieger.toothbrushgame.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class Game {
     @Size(min = 3)
     private String title;
 
+    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private GamePreferences preferences;
 
@@ -29,6 +31,8 @@ public class Game {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Player owner;
+
+    private GameStatus gameStatus;
 
     @OneToMany(mappedBy = "game")
     private List<Player> players;
