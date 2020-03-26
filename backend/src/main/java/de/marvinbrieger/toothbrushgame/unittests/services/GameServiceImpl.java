@@ -6,6 +6,7 @@ import de.marvinbrieger.toothbrushgame.domain.GameStatus;
 import de.marvinbrieger.toothbrushgame.domain.QGame;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.unittests.services.exceptions.GameNotFoundExeception;
+import de.marvinbrieger.toothbrushgame.unittests.services.exceptions.IncompleteRequestException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,6 +46,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.controll
         game.setPlayers(null); // api user could not add players
         game.setGameStatus(GameStatus.PREPARATION);
 
+        if (game.getOwner() == null) throw new IncompleteRequestException("owner");
         game.getOwner().setGame(game); // the creator is also player in the game
 
         return gameRepository.save(game);
