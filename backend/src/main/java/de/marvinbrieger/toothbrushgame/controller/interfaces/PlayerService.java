@@ -1,8 +1,8 @@
 package de.marvinbrieger.toothbrushgame.controller.interfaces;
 
 import de.marvinbrieger.toothbrushgame.domain.Player;
-import de.marvinbrieger.toothbrushgame.unittests.services.exceptions.GameNotFoundExeception;
-import de.marvinbrieger.toothbrushgame.unittests.services.exceptions.PlayerAlreadyExistsException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundExeception;
+import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
 
 public interface PlayerService {
 

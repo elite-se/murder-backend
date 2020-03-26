@@ -1,6 +1,6 @@
 package de.marvinbrieger.toothbrushgame.controller.advices;
 
-import de.marvinbrieger.toothbrushgame.unittests.services.exceptions.PlayerAlreadyExistsException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
