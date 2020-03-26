@@ -3,13 +3,13 @@ package de.marvinbrieger.toothbrushgame.services;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.domain.KillAssignment;
 import de.marvinbrieger.toothbrushgame.domain.Player;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
+@Service
 public class AssignmentHelperService {
 
     private int[] initalizeIntArray(int length) {
@@ -59,7 +59,7 @@ public class AssignmentHelperService {
         List<KillAssignment> assignments = new ArrayList();
         int[] randomCycle = generatRandomCycle(players.size());
 
-        for (int k = 1; k < players.size(); k++)
+        for (int k = 0; k < players.size(); k++)
             assignments.add(new KillAssignment(null, game, players.get(k), players.get(randomCycle[k])));
 
         return assignments;

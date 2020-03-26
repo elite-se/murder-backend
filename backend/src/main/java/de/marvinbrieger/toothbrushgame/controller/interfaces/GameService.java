@@ -1,14 +1,14 @@
 package de.marvinbrieger.toothbrushgame.controller.interfaces;
 
 import de.marvinbrieger.toothbrushgame.domain.Game;
-import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundExeception;
+import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 
 public interface GameService {
 
     /**
      * Returns the game found by the given id.
      *
-     * @throws GameNotFoundExeception Is thrown if the game does not exist.
+     * @throws GameNotFoundException Is thrown if the game does not exist.
      *
      * @param id
      * @return
@@ -18,7 +18,7 @@ public interface GameService {
     /**
      * Returns the game found by the given game code.
      *
-     * @throws GameNotFoundExeception Is thrown if there is no running game with
+     * @throws GameNotFoundException Is thrown if there is no running game with
      * the given gameCode.
      *
      * @param gameCode
@@ -40,7 +40,7 @@ public interface GameService {
     /**
      * Starts the specified game and returns it.
      *
-     * @throws GameNotFoundExeception Is thrown if the state of the specified
+     * @throws GameNotFoundException Is thrown if the state of the specified
      * game is inappropriate.
      *
      * @param id
@@ -51,7 +51,7 @@ public interface GameService {
     /**
      * Ends the specified game and returns it.
      *
-     * @throws GameNotFoundExeception Is thrown if the state of the specified
+     * @throws GameNotFoundException Is thrown if the state of the specified
      * game is inappropriate.
      *
      * @param id

@@ -39,4 +39,18 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<Player> players;
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "game"
+    )
+    private List<KillAssignment> killAssignments;
+
+    public boolean inPreparation() {
+        return gameStatus == GameStatus.PREPARATION;
+    }
+
+    public boolean isRunning() {
+        return gameStatus == GameStatus.RUNNING;
+    }
+
 }

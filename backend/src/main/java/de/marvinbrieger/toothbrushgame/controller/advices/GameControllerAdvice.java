@@ -1,6 +1,6 @@
 package de.marvinbrieger.toothbrushgame.controller.advices;
 
-import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundExeception;
+import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GameControllerAdvice {
 
     @ResponseBody
-    @ExceptionHandler(GameNotFoundExeception.class)
+    @ExceptionHandler(GameNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String gameNotFoundHandler(GameNotFoundExeception ex) {
+    String gameNotFoundHandler(GameNotFoundException ex) {
         return ex.getMessage();
     }
 

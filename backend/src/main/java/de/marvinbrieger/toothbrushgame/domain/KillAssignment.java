@@ -1,5 +1,6 @@
 package de.marvinbrieger.toothbrushgame.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class KillAssignment {
     @GeneratedValue
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     private Game game;
 
