@@ -4,7 +4,7 @@ import de.marvinbrieger.toothbrushgame.controller.interfaces.PlayerService;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.persistence.PlayerRepository;
-import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundExeception;
+import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class PlayerServiceImplTest {
         playerService.joinGame(EXISTING_ID, ELIAS);
     }
 
-    @Test(expected = GameNotFoundExeception.class)
+    @Test(expected = GameNotFoundException.class)
     public void joinToMissingGame_ThrowsException() {
         playerService.joinGame(MISSING_ID, MARVIN);
     }
