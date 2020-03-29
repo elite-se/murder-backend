@@ -3,14 +3,12 @@ package de.marvinbrieger.toothbrushgame.services;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.domain.GameStatus;
-import de.marvinbrieger.toothbrushgame.domain.Player;
 import de.marvinbrieger.toothbrushgame.domain.QGame;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services.interfaces.GameService {
@@ -64,7 +62,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         return gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
                 .map(game -> {
                     game.setGameStatus(GameStatus.RUNNING);
-                    game.setKillAssignments(assignmentHelperService.generateKillAssignments(game));
+                    game.setMurderAssignments(assignmentHelperService.generateKillAssignments(game));
                     return gameRepository.save(game);
                 })
                 .orElseThrow(() -> new GameNotFoundException(id, GameStatus.PREPARATION));

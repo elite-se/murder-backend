@@ -44,7 +44,7 @@ public class Game {
             cascade = CascadeType.ALL,
             mappedBy = "game"
     )
-    private List<KillAssignment> killAssignments;
+    private List<MurderAssignment> murderAssignments;
 
     public boolean inPreparation() {
         return gameStatus == GameStatus.PREPARATION;

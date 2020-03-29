@@ -2,7 +2,7 @@ package de.marvinbrieger.toothbrushgame.mocks;
 
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.domain.GameStatus;
-import de.marvinbrieger.toothbrushgame.domain.KillAssignment;
+import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
 import de.marvinbrieger.toothbrushgame.domain.Player;
 import de.marvinbrieger.toothbrushgame.services.AssignmentGeneratorService;
 
@@ -47,8 +47,8 @@ public class GameMocks {
         Game startedGame = new Game(1L, "Softskillkurs SE 14", STANDARD_PREFERENCES,
                 "ANTZUF", STORED_ELIAS, GameStatus.RUNNING, playersStartedGame, null);
         AssignmentGeneratorService assignmentHelperService = new AssignmentGeneratorService();
-        List<KillAssignment> killAssignments = assignmentHelperService.generateKillAssignments(startedGame);
-        startedGame.setKillAssignments(killAssignments);
+        List<MurderAssignment> murderAssignments = assignmentHelperService.generateKillAssignments(startedGame);
+        startedGame.setMurderAssignments(murderAssignments);
         SOFTSKILL_GAME_STARTED = startedGame;
     }
 

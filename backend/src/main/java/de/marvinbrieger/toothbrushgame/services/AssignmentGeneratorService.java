@@ -1,8 +1,8 @@
 package de.marvinbrieger.toothbrushgame.services;
 
 import de.marvinbrieger.toothbrushgame.domain.Game;
-import de.marvinbrieger.toothbrushgame.domain.KillAssignment;
-import de.marvinbrieger.toothbrushgame.domain.KillAssignmentStatus;
+import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
+import de.marvinbrieger.toothbrushgame.domain.MurderAssignmentStatus;
 import de.marvinbrieger.toothbrushgame.domain.Player;
 import org.springframework.stereotype.Service;
 
@@ -55,27 +55,27 @@ public class AssignmentGeneratorService {
      * @param game
      * @return
      */
-    public List<KillAssignment> generateKillAssignments(Game game) {
+    public List<MurderAssignment> generateKillAssignments(Game game) {
         List<Player> players = game.getPlayers();
-        List<KillAssignment> assignments = new ArrayList();
+        List<MurderAssignment> assignments = new ArrayList();
         int[] randomCycle = generatRandomCycle(players.size());
 
         for (int k = 0; k < players.size(); k++)
-            assignments.add(new KillAssignment(null, game, players.get(k), players.get(randomCycle[k]), KillAssignmentStatus.PENDING, null));
+            assignments.add(new MurderAssignment(null, game, players.get(k), players.get(randomCycle[k]), MurderAssignmentStatus.PENDING, null));
 
         return assignments;
     }
 
-    private KillAssignment findSuccessor(List<KillAssignment> assignments, KillAssignment source) {
-        for (KillAssignment potentialSuccessor : assignments)
+    private MurderAssignment findSuccessor(List<MurderAssignment> assignments, MurderAssignment source) {
+        for (MurderAssignment potentialSuccessor : assignments)
             if (source.hasSuccessor(potentialSuccessor))
                 return potentialSuccessor;
 
         throw new IllegalArgumentException();
     }
 
-    public void linkKillAssignments(List<KillAssignment> assignments) {
-        for (KillAssignment source : assignments)
+    public void linkKillAssignments(List<MurderAssignment> assignments) {
+        for (MurderAssignment source : assignments)
             source.setSuccessor(findSuccessor(assignments, source));
     }
 
