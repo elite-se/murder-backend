@@ -27,7 +27,7 @@ public class PlayerServiceImpl implements PlayerService {
         Game gameToJoin = gameRepository.findById(gameId)
                 .orElseThrow(() -> new GameNotFoundException(gameId));
 
-        if (gameToJoin.inPreparation())
+        if (!gameToJoin.inPreparation())
             throw new GameNotFoundException(gameId, GameStatus.PREPARATION);
 
         if (playerRepository.existsByGame_IdAndPlayerName(gameId, player.getPlayerName()))
