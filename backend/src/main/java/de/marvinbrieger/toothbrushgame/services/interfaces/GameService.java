@@ -1,4 +1,4 @@
-package de.marvinbrieger.toothbrushgame.controller.interfaces;
+package de.marvinbrieger.toothbrushgame.services.interfaces;
 
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;

@@ -1,6 +1,6 @@
 package de.marvinbrieger.toothbrushgame.services;
 
-import de.marvinbrieger.toothbrushgame.controller.interfaces.PlayerService;
+import de.marvinbrieger.toothbrushgame.services.interfaces.PlayerService;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.persistence.PlayerRepository;

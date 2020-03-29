@@ -9,7 +9,7 @@ import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException
 import org.springframework.stereotype.Service;
 
 @Service
-public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.controller.interfaces.GameService {
+public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services.interfaces.GameService {
 
     private final GameRepository gameRepository;
 

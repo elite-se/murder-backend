@@ -1,7 +1,7 @@
 package de.marvinbrieger.toothbrushgame.push;
 
 import de.marvinbrieger.toothbrushgame.domain.KillAssignment;
-import de.marvinbrieger.toothbrushgame.services.interfaces.KillAssignmentPushService;
+import de.marvinbrieger.toothbrushgame.push.interfaces.KillAssignmentPushService;
 
 public class KillAssignmentPushServiceImpl implements KillAssignmentPushService {
 
