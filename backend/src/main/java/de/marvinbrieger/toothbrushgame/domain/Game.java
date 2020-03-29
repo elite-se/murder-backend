@@ -1,5 +1,6 @@
 package de.marvinbrieger.toothbrushgame.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,7 @@ public class Game {
         return gameStatus == GameStatus.PREPARATION;
     }
 
+    @JsonIgnore
     public boolean isRunning() {
         return gameStatus == GameStatus.RUNNING;
     }
