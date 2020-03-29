@@ -4,24 +4,19 @@ import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.domain.GameStatus;
 import de.marvinbrieger.toothbrushgame.domain.KillAssignment;
 import de.marvinbrieger.toothbrushgame.domain.Player;
-import de.marvinbrieger.toothbrushgame.services.AssignmentHelperService;
+import de.marvinbrieger.toothbrushgame.services.AssignmentGeneratorService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static de.marvinbrieger.toothbrushgame.mocks.GamePreferencesMocks.STANDARD_PREFERENCES;
-import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.ALEX;
 import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.ELIAS;
-import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.KIPF;
-import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.MARVIN;
-import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.NEUMANN;
 import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.STORED_ALEX;
 import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.STORED_ELIAS;
 import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.STORED_KIPF;
 import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.STORED_MARVIN;
 import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.STORED_NEUMANN;
 import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.STORED_WINTER;
-import static de.marvinbrieger.toothbrushgame.mocks.PlayerMocks.WINTER;
 
 public class GameMocks {
 
@@ -51,7 +46,7 @@ public class GameMocks {
         List<Player> playersStartedGame = getPlayersList();
         Game startedGame = new Game(1L, "Softskillkurs SE 14", STANDARD_PREFERENCES,
                 "ANTZUF", STORED_ELIAS, GameStatus.RUNNING, playersStartedGame, null);
-        AssignmentHelperService assignmentHelperService = new AssignmentHelperService();
+        AssignmentGeneratorService assignmentHelperService = new AssignmentGeneratorService();
         List<KillAssignment> killAssignments = assignmentHelperService.generateKillAssignments(startedGame);
         startedGame.setKillAssignments(killAssignments);
         SOFTSKILL_GAME_STARTED = startedGame;

@@ -15,9 +15,9 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.controll
 
     private final GameCodeService gameCodeService;
 
-    private final AssignmentHelperService assignmentHelperService;
+    private final AssignmentGeneratorService assignmentHelperService;
 
-    GameServiceImpl(GameRepository gameRepository, GameCodeService gameCodeService, AssignmentHelperService assignmentHelperService) {
+    GameServiceImpl(GameRepository gameRepository, GameCodeService gameCodeService, AssignmentGeneratorService assignmentHelperService) {
         this.gameRepository = gameRepository;
         this.gameCodeService = gameCodeService;
         this.assignmentHelperService = assignmentHelperService;
