@@ -16,6 +16,13 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
+    /**
+     * @see PlayerService
+     *
+     * @param gameId
+     * @param player
+     * @return
+     */
     @PostMapping("/games/{gameId}/players")
     Player joinGame(@PathVariable Long gameId, @RequestBody Player player) {
         return playerService.joinGame(gameId, player);
