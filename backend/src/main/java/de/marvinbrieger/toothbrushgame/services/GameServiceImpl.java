@@ -3,10 +3,14 @@ package de.marvinbrieger.toothbrushgame.services;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.domain.GameStatus;
+import de.marvinbrieger.toothbrushgame.domain.Player;
 import de.marvinbrieger.toothbrushgame.domain.QGame;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services.interfaces.GameService {
@@ -45,10 +49,12 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         String gameCode = gameCodeService.getNewGameCode();
         game.setGameCode(gameCode);
 
-        game.setPlayers(null); // api user could not add players
+        game.setPlayers(new ArrayList<>()); // api user could not add players
         game.setGameStatus(GameStatus.PREPARATION);
 
-        game.getOwner().setGame(game); // the creator is also player in the game
+        // the creator is also player in the game
+        game.getPlayers().add(game.getOwner());
+        game.getOwner().setGame(game);
 
         return gameRepository.save(game);
     }
