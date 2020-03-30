@@ -66,17 +66,4 @@ public class AssignmentGeneratorService {
         return assignments;
     }
 
-    private MurderAssignment findSuccessor(List<MurderAssignment> assignments, MurderAssignment source) {
-        for (MurderAssignment potentialSuccessor : assignments)
-            if (source.hasSuccessor(potentialSuccessor))
-                return potentialSuccessor;
-
-        throw new IllegalArgumentException();
-    }
-
-    public void linkKillAssignments(List<MurderAssignment> assignments) {
-        for (MurderAssignment source : assignments)
-            source.setSuccessor(findSuccessor(assignments, source));
-    }
-
 }
