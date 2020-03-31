@@ -2,6 +2,7 @@ package de.marvinbrieger.toothbrushgame.controller;
 
 import de.marvinbrieger.toothbrushgame.domain.ApplicationUser;
 import de.marvinbrieger.toothbrushgame.persistence.ApplicationUserRepository;
+import de.marvinbrieger.toothbrushgame.services.exceptions.AlreadySignedUpException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,8 @@ public class AuthController {
 
     @PostMapping("/sign-up")
     public void signUp(@RequestBody ApplicationUser user) {
+        if (applicationUserRepository.findByDeviceId(user.getDeviceId()) != null)
+            throw new AlreadySignedUpException(user.getDeviceId());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         applicationUserRepository.save(user);
     }
