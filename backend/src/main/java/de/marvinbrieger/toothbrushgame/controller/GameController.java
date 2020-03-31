@@ -1,6 +1,6 @@
 package de.marvinbrieger.toothbrushgame.controller;
 
-import de.marvinbrieger.toothbrushgame.controller.interfaces.GameService;
+import de.marvinbrieger.toothbrushgame.services.interfaces.GameService;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,5 +1,6 @@
 package de.marvinbrieger.toothbrushgame.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,5 +39,20 @@ public class Game {
 
     @OneToMany(mappedBy = "game")
     private List<Player> players;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "game"
+    )
+    private List<MurderAssignment> murderAssignments;
+
+    public boolean inPreparation() {
+        return gameStatus == GameStatus.PREPARATION;
+    }
+
+    @JsonIgnore
+    public boolean isRunning() {
+        return gameStatus == GameStatus.RUNNING;
+    }
 
 }

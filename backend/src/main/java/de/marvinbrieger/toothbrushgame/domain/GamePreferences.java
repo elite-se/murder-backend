@@ -34,7 +34,7 @@ public class GamePreferences {
 
     @JsonProperty()
     public boolean allWeaponsAllowed() {
-        return allowedWeapons != null && !allowedWeapons.isEmpty();
+        return allowedWeapons == null || allowedWeapons.isEmpty();
     }
 
 }

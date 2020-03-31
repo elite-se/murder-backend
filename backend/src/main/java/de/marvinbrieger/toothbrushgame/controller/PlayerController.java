@@ -1,6 +1,6 @@
 package de.marvinbrieger.toothbrushgame.controller;
 
-import de.marvinbrieger.toothbrushgame.controller.interfaces.PlayerService;
+import de.marvinbrieger.toothbrushgame.services.interfaces.PlayerService;
 import de.marvinbrieger.toothbrushgame.domain.Player;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +16,13 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
+    /**
+     * @see PlayerService
+     *
+     * @param gameId
+     * @param player
+     * @return
+     */
     @PostMapping("/games/{gameId}/players")
     Player joinGame(@PathVariable Long gameId, @RequestBody Player player) {
         return playerService.joinGame(gameId, player);

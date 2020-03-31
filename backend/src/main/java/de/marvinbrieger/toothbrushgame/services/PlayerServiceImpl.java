@@ -1,12 +1,13 @@
-package de.marvinbrieger.toothbrushgame.unittests.services;
+package de.marvinbrieger.toothbrushgame.services;
 
-import de.marvinbrieger.toothbrushgame.controller.interfaces.PlayerService;
+import de.marvinbrieger.toothbrushgame.services.interfaces.PlayerService;
 import de.marvinbrieger.toothbrushgame.domain.Game;
+import de.marvinbrieger.toothbrushgame.domain.GameStatus;
 import de.marvinbrieger.toothbrushgame.domain.Player;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.persistence.PlayerRepository;
-import de.marvinbrieger.toothbrushgame.unittests.services.exceptions.GameNotFoundExeception;
-import de.marvinbrieger.toothbrushgame.unittests.services.exceptions.PlayerAlreadyExistsException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +25,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player joinGame(Long gameId, Player player) {
         Game gameToJoin = gameRepository.findById(gameId)
-                .orElseThrow(() -> new GameNotFoundExeception(gameId));
+                .orElseThrow(() -> new GameNotFoundException(gameId));
+
+        if (!gameToJoin.inPreparation())
+            throw new GameNotFoundException(gameId, GameStatus.PREPARATION);
 
         if (playerRepository.existsByGame_IdAndPlayerName(gameId, player.getPlayerName()))
             throw new PlayerAlreadyExistsException(player.getPlayerName());
