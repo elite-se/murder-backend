@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
@@ -29,4 +28,7 @@ public class Player {
     @Size(min = 3)
     private String playerName;
 
+    @JsonIgnore // contains sensitive data
+    @ManyToOne
+    private ApplicationUser user;
 }

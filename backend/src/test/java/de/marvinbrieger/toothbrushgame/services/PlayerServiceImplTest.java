@@ -1,11 +1,12 @@
 package de.marvinbrieger.toothbrushgame.services;
 
-import de.marvinbrieger.toothbrushgame.services.interfaces.PlayerService;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.persistence.PlayerRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
+import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
+import de.marvinbrieger.toothbrushgame.services.interfaces.PlayerService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +40,9 @@ public class PlayerServiceImplTest {
         when(gameRepository.findById(EXISTING_ID)).thenReturn(standardGame);
         when(gameRepository.findById(MISSING_ID)).thenReturn(Optional.empty());
 
-        this.playerService = new PlayerServiceImpl(playerRepository, gameRepository);
+        CurrentUserService currentUserService = mock(CurrentUserService.class);
+
+        this.playerService = new PlayerServiceImpl(playerRepository, gameRepository, currentUserService);
     }
 
     @Test(expected = PlayerAlreadyExistsException.class)

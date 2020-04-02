@@ -1,32 +1,26 @@
 package de.marvinbrieger.toothbrushgame.services;
 
-import de.marvinbrieger.toothbrushgame.domain.Game;
-import de.marvinbrieger.toothbrushgame.domain.GameStatus;
-import de.marvinbrieger.toothbrushgame.domain.Murder;
-import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
-import de.marvinbrieger.toothbrushgame.domain.MurderAssignmentStatus;
-import de.marvinbrieger.toothbrushgame.domain.Player;
+import de.marvinbrieger.toothbrushgame.domain.*;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.persistence.MurderAssignmentRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.MurderAssignmentNotFoundException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.NotYourAssignmentException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
+import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.MurderService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class MurderServiceImpl implements MurderService {
-
     private final MurderAssignmentRepository murderAssignmentRepository;
-
     private final GameRepository gameRepository;
-
-    MurderServiceImpl(MurderAssignmentRepository murderAssignmentRepository, GameRepository gameRepository) {
-        this.murderAssignmentRepository = murderAssignmentRepository;
-        this.gameRepository = gameRepository;
-    }
+    private final CurrentUserService currentUserService;
 
     private void addMurder(MurderAssignment murderAssignment) {
         Murder murder = new Murder(null, Instant.now(), murderAssignment);
@@ -53,7 +47,7 @@ public class MurderServiceImpl implements MurderService {
     }
 
     @Override
-    public Murder commitMurder(Long gameId, Long assignmentId) {
+    public Murder commitMurder(Long gameId, Long assignmentId) throws NotYourAssignmentException {
         Game game = gameRepository.findByIdAndGameStatus(gameId, GameStatus.RUNNING)
                 .orElseThrow(() -> new GameNotFoundException(gameId));
 
@@ -65,9 +59,15 @@ public class MurderServiceImpl implements MurderService {
                 })
                 .orElseThrow(() -> new MurderAssignmentNotFoundException(assignmentId));
 
+        try {
+            if (!currentUserService.getCurrentUser().equals(currentMurderAssignment.getKiller().getUser()))
+                throw new NotYourAssignmentException();
+        } catch (UserNotFoundException e) {
+            throw new NotYourAssignmentException(e);
+        }
+
         addNewMurderAssignment(game, currentMurderAssignment);
         gameRepository.save(game);
-
         return currentMurderAssignment.getMurder();
     }
 

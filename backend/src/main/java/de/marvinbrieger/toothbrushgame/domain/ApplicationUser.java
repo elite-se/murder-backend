@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -28,4 +26,7 @@ public class ApplicationUser {
     private String password;
 
     private String pushToken;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
+    private Set<Player> players;
 }
