@@ -8,7 +8,9 @@ public class KillAssignmentPushServiceImpl implements KillAssignmentPushService 
     @Override
     public void pushKillAssignment(MurderAssignment murderAssignment) {
         // TODO place a real implementation here
-        System.out.println(murderAssignment.getKiller().getPlayerName() + " has to kill " + murderAssignment.getTarget().getPlayerName());
+        System.out.println(murderAssignment.getKiller()
+                .getPlayerName() + " has to kill " + murderAssignment.getTarget()
+                .getPlayerName());
     }
 
 }

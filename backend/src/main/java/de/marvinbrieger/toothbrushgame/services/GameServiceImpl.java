@@ -6,12 +6,12 @@ import de.marvinbrieger.toothbrushgame.domain.GameStatus;
 import de.marvinbrieger.toothbrushgame.domain.QGame;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
+import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 @Service
-public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services.interfaces.GameService {
+public class GameServiceImpl
+        implements de.marvinbrieger.toothbrushgame.services.interfaces.GameService {
 
     private final GameRepository gameRepository;
 
@@ -19,7 +19,8 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
 
     private final AssignmentGeneratorService assignmentHelperService;
 
-    GameServiceImpl(GameRepository gameRepository, GameCodeService gameCodeService, AssignmentGeneratorService assignmentHelperService) {
+    GameServiceImpl(GameRepository gameRepository, GameCodeService gameCodeService,
+            AssignmentGeneratorService assignmentHelperService) {
         this.gameRepository = gameRepository;
         this.gameCodeService = gameCodeService;
         this.assignmentHelperService = assignmentHelperService;
@@ -62,7 +63,8 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         return gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
                 .map(game -> {
                     game.setGameStatus(GameStatus.RUNNING);
-                    game.setMurderAssignments(assignmentHelperService.generateKillAssignments(game));
+                    game.setMurderAssignments(
+                            assignmentHelperService.generateKillAssignments(game));
                     return gameRepository.save(game);
                 })
                 .orElseThrow(() -> new GameNotFoundException(id, GameStatus.PREPARATION));

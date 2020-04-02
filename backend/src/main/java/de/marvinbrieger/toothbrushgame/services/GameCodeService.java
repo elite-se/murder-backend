@@ -25,14 +25,12 @@ public class GameCodeService {
 
     /**
      * Generates a random string of the given length.
-     *
-     * @param length
-     * @return
      */
     private String getRandomIdentifier(int length) {
         StringBuilder randomIdentifier = new StringBuilder();
-        for (int j = 0; j < length; j++)
+        for (int j = 0; j < length; j++) {
             randomIdentifier.append((char) ('A' + 26 * Math.random()));
+        }
 
         return randomIdentifier.toString();
     }
@@ -40,11 +38,11 @@ public class GameCodeService {
     /**
      * Returns a new game identifier.
      *
-     * @throws NoGameCodeAvailableException Is thrown if the number of attempts defined by FAILURE_THRESHOLD to
-     * create a new game code failed. That means the reserve of unused game codes is exhausted with high
-     * probability.
-     *
-     * @return
+     * @throws NoGameCodeAvailableException Is thrown if the number of attempts defined by
+     *                                      FAILURE_THRESHOLD to
+     *                                      create a new game code failed. That means the reserve
+     *                                      of unused game codes is exhausted with high
+     *                                      probability.
      */
     public String getNewGameCode() {
         for (int failCount = 0; failCount < FAILURE_THRESHOLD; failCount++) {
@@ -54,10 +52,11 @@ public class GameCodeService {
                     .and(QGame.game
                             .gameStatus.ne(GameStatus.FINISHED));
 
-            if (gameRepository.exists(pred))
+            if (gameRepository.exists(pred)) {
                 failCount++;
-            else
+            } else {
                 return gameCode;
+            }
         }
         throw new NoGameCodeAvailableException();
     }

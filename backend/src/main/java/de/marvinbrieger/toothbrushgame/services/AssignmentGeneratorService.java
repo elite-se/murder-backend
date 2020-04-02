@@ -4,19 +4,19 @@ import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
 import de.marvinbrieger.toothbrushgame.domain.MurderAssignmentStatus;
 import de.marvinbrieger.toothbrushgame.domain.Player;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AssignmentGeneratorService {
 
     private int[] initalizeIntArray(int length) {
         int[] arr = new int[length];
-        for (int k = 0; k < length; k++)
+        for (int k = 0; k < length; k++) {
             arr[k] = k;
+        }
 
         return arr;
     }
@@ -30,12 +30,9 @@ public class AssignmentGeneratorService {
     /**
      * Generates a random cycle of the given length.
      *
-     * The implemented algorithm is called sattolo's algorithm. It is a variant of
+     * <p>The implemented algorithm is called sattolo's algorithm. It is a variant of
      * the Fisher-Yates-Algorithm for generating random permutations that generates
-     * a permutation with exactly one cycle.
-     *
-     * @param length
-     * @return
+     * a permutation with exactly one cycle.</p>
      */
     private int[] generatRandomCycle(int length) {
         Random random = new Random();
@@ -51,17 +48,17 @@ public class AssignmentGeneratorService {
 
     /**
      * Returns random kill assignments for the given game.
-     *
-     * @param game
-     * @return
      */
     public List<MurderAssignment> generateKillAssignments(Game game) {
         List<Player> players = game.getPlayers();
         List<MurderAssignment> assignments = new ArrayList();
         int[] randomCycle = generatRandomCycle(players.size());
 
-        for (int k = 0; k < players.size(); k++)
-            assignments.add(new MurderAssignment(null, game, players.get(k), players.get(randomCycle[k]), MurderAssignmentStatus.PENDING, null));
+        for (int k = 0; k < players.size(); k++) {
+            assignments.add(
+                    new MurderAssignment(null, game, players.get(k), players.get(randomCycle[k]),
+                            MurderAssignmentStatus.PENDING, null));
+        }
 
         return assignments;
     }

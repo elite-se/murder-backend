@@ -11,10 +11,9 @@ import de.marvinbrieger.toothbrushgame.persistence.MurderAssignmentRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.MurderAssignmentNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.MurderService;
-import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class MurderServiceImpl implements MurderService {
@@ -23,7 +22,8 @@ public class MurderServiceImpl implements MurderService {
 
     private final GameRepository gameRepository;
 
-    MurderServiceImpl(MurderAssignmentRepository murderAssignmentRepository, GameRepository gameRepository) {
+    MurderServiceImpl(MurderAssignmentRepository murderAssignmentRepository,
+            GameRepository gameRepository) {
         this.murderAssignmentRepository = murderAssignmentRepository;
         this.gameRepository = gameRepository;
     }
@@ -34,20 +34,26 @@ public class MurderServiceImpl implements MurderService {
         murderAssignment.setAssignmentStatus(MurderAssignmentStatus.FULLFILLED);
     }
 
-    private MurderAssignment findSuccessor(List<MurderAssignment> assignments, MurderAssignment source) {
-        for (MurderAssignment potentialSuccessor : assignments)
-            if (source.hasSuccessor(potentialSuccessor))
+    private MurderAssignment findSuccessor(List<MurderAssignment> assignments,
+            MurderAssignment source) {
+        for (MurderAssignment potentialSuccessor : assignments) {
+            if (source.hasSuccessor(potentialSuccessor)) {
                 return potentialSuccessor;
+            }
+        }
 
         throw new IllegalArgumentException();
     }
 
     private void addNewMurderAssignment(Game game, MurderAssignment currentAssignment) {
         Player killer = currentAssignment.getKiller();
-        MurderAssignment targetsAssignment = findSuccessor(game.getMurderAssignments(), currentAssignment);
+        MurderAssignment targetsAssignment = findSuccessor(game.getMurderAssignments(),
+                currentAssignment);
 
-        MurderAssignment killersNewMission = new MurderAssignment(null, game, killer, targetsAssignment.getTarget(),
-                MurderAssignmentStatus.PENDING, null);
+        MurderAssignment killersNewMission = new MurderAssignment(null, game, killer,
+                targetsAssignment.getTarget(),
+                MurderAssignmentStatus.PENDING,
+                null);
 
         game.getMurderAssignments().add(killersNewMission);
     }
