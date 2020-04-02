@@ -25,7 +25,7 @@ public class MurderServiceImpl implements MurderService {
     private void addMurder(MurderAssignment murderAssignment) {
         Murder murder = new Murder(null, Instant.now(), murderAssignment);
         murderAssignment.setMurder(murder);
-        murderAssignment.setAssignmentStatus(MurderAssignmentStatus.FULLFILLED);
+        murderAssignment.setAssignmentStatus(MurderAssignmentStatus.FULFILLED);
     }
 
     private MurderAssignment findSuccessor(List<MurderAssignment> assignments, MurderAssignment source) {
