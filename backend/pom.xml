@@ -99,7 +99,24 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<configLocation>${project.basedir}/checkstyle/google_checks_custom.xml</configLocation>
+					<propertyExpansion>org.checkstyle.google.suppressionfilter.config=${project.basedir}/checkstyle/suppressions.xml</propertyExpansion>
+				</configuration>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
