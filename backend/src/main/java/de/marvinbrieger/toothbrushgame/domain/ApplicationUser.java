@@ -26,4 +26,6 @@ public class ApplicationUser {
     private String deviceId;
 
     private String password;
+
+    private String pushToken;
 }

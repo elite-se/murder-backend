@@ -2,6 +2,7 @@ package de.marvinbrieger.toothbrushgame.services.interfaces;
 
 import de.marvinbrieger.toothbrushgame.domain.ApplicationUser;
 import de.marvinbrieger.toothbrushgame.services.exceptions.AlreadySignedUpException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface UserService {
@@ -13,5 +14,11 @@ public interface UserService {
      */
     void signUp(@RequestBody ApplicationUser user) throws AlreadySignedUpException;
 
-
+    /**
+     * Sets the expo push token for the currently logged in user.
+     *
+     * @param token the expo push token of the logged in user
+     * @throws UserNotFoundException if the token used to authenticate is valid, but its user does not exist any more
+     */
+    void setPushToken(String token) throws UserNotFoundException;
 }
