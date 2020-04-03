@@ -3,6 +3,7 @@ package de.marvinbrieger.toothbrushgame.push.interfaces;
 import io.github.jav.exposerversdk.ExpoPushMessage;
 import io.github.jav.exposerversdk.ExpoPushTicket;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -22,5 +23,5 @@ public interface ExpoPushService {
      * @param messages the messages that will be sent to the server
      * @return a future containing the answers from the Expo server for the separate messages
      */
-    CompletableFuture<List<ExpoPushTicket>> sendMessagesAsync(List<ExpoPushMessage> messages);
+    CompletableFuture<List<ExpoPushTicket>> sendMessagesAsync(Collection<ExpoPushMessage> messages);
 }

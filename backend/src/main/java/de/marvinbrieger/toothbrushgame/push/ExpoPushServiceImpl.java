@@ -5,11 +5,10 @@ import io.github.jav.exposerversdk.ExpoPushMessage;
 import io.github.jav.exposerversdk.ExpoPushTicket;
 import io.github.jav.exposerversdk.PushClient;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -18,14 +17,12 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class ExpoPushServiceImpl implements ExpoPushService {
-    private static final Logger logger = LoggerFactory.getLogger(ExpoPushServiceImpl.class);
     private PushClient pushClient;
 
-
     @Override
-    public CompletableFuture<List<ExpoPushTicket>> sendMessagesAsync(List<ExpoPushMessage> messages) {
+    public CompletableFuture<List<ExpoPushTicket>> sendMessagesAsync(Collection<ExpoPushMessage> messages) {
         // chunk messages
-        var chunks = pushClient.chunkPushNotifications(messages);
+        var chunks = pushClient.chunkPushNotifications(new ArrayList<>(messages));
 
         // send messages async
         List<CompletableFuture<List<ExpoPushTicket>>> replyFutures = new ArrayList<>(chunks.size());
