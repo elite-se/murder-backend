@@ -2,12 +2,13 @@ package de.marvinbrieger.toothbrushgame.push;
 
 import io.github.jav.exposerversdk.PushClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-public final class ExpoPushClientBean {
-    private ExpoPushClientBean() {}
-
+@Configuration
+public class ExpoPushClientBean {
     @Bean
     public PushClient getPushClient() {
         return new PushClient();
     }
+
 }
