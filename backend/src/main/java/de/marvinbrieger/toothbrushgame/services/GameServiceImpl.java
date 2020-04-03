@@ -1,11 +1,9 @@
 package de.marvinbrieger.toothbrushgame.services;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import de.marvinbrieger.toothbrushgame.domain.Game;
-import de.marvinbrieger.toothbrushgame.domain.GameStatus;
-import de.marvinbrieger.toothbrushgame.domain.Player;
-import de.marvinbrieger.toothbrushgame.domain.QGame;
+import de.marvinbrieger.toothbrushgame.domain.*;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
+import de.marvinbrieger.toothbrushgame.push.interfaces.PushNotificationService;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.NoGameOwnerException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
@@ -15,6 +13,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +22,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     private final GameCodeService gameCodeService;
     private final AssignmentGeneratorService assignmentHelperService;
     private final CurrentUserService currentUserService;
+    private final PushNotificationService pushNotificationService;
 
     @Override
     public Game getGameById(Long id) {
@@ -74,7 +74,9 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
                 .orElseThrow(() -> new GameNotFoundException(id, GameStatus.PREPARATION));
         ensureRequestedByGameOwner(game);
         game.setGameStatus(GameStatus.RUNNING);
-        game.setMurderAssignments(assignmentHelperService.generateKillAssignments(game));
+        List<MurderAssignment> murderAssignments = assignmentHelperService.generateKillAssignments(game);
+        game.setMurderAssignments(murderAssignments);
+        pushNotificationService.pushMurderAssignments(murderAssignments);
         return gameRepository.save(game);
     }
 
