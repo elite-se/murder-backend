@@ -47,6 +47,7 @@ public class BaseNotificationService {
     protected static ExpoPushMessage prepareMessage(String type, Game game, String ...recipients) {
         ExpoPushMessage msg = new ExpoPushMessage(List.of(recipients));
         msg.title = game.getTitle();
+        msg.channelId = type;
 
         var data = new HashMap<String, String>();
         msg.data = data;
