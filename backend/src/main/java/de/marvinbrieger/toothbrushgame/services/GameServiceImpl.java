@@ -3,7 +3,8 @@ package de.marvinbrieger.toothbrushgame.services;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import de.marvinbrieger.toothbrushgame.domain.*;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
-import de.marvinbrieger.toothbrushgame.push.interfaces.PushNotificationService;
+import de.marvinbrieger.toothbrushgame.push.interfaces.GameEndedNotificationService;
+import de.marvinbrieger.toothbrushgame.push.interfaces.MurderAssignmentNotificationService;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.NoGameOwnerException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
@@ -22,7 +23,8 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     private final GameCodeService gameCodeService;
     private final AssignmentGeneratorService assignmentHelperService;
     private final CurrentUserService currentUserService;
-    private final PushNotificationService pushNotificationService;
+    private final MurderAssignmentNotificationService murderAssignmentNotificationService;
+    private final GameEndedNotificationService gameEndedNotificationService;
 
     @Override
     public Game getGameById(Long id) {
@@ -76,7 +78,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         game.setGameStatus(GameStatus.RUNNING);
         List<MurderAssignment> murderAssignments = assignmentHelperService.generateKillAssignments(game);
         game.setMurderAssignments(murderAssignments);
-        pushNotificationService.pushMurderAssignments(murderAssignments);
+        murderAssignmentNotificationService.pushMurderAssignments(murderAssignments);
         return gameRepository.save(game);
     }
 
@@ -86,6 +88,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
                 .orElseThrow(() -> new GameNotFoundException(id, GameStatus.RUNNING));
         ensureRequestedByGameOwner(game);
         game.setGameStatus(GameStatus.FINISHED);
+        gameEndedNotificationService.pushGameEnding(game);
         return gameRepository.save(game);
     }
 

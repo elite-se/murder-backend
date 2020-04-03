@@ -5,9 +5,9 @@ import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
 import java.util.Collection;
 
 /**
- * Sends push notifications for different events.
+ * Sends push notifications for murder assignments.
  */
-public interface PushNotificationService {
+public interface MurderAssignmentNotificationService {
     /**
      * Informs the murderers of the given assignments about their victim via push notifications.
      *

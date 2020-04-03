@@ -9,10 +9,6 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * A pretty low-level approach to sending push notifications using the Expo services.
- *
- * {@link PushNotificationService} provides a higher-level service.
- *
- * @see PushNotificationService
  */
 public interface ExpoPushService {
     /**
