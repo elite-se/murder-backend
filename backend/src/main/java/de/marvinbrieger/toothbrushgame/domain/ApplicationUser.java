@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Locale;
 import java.util.Set;
 
 @Data
@@ -29,4 +30,6 @@ public class ApplicationUser {
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     private Set<Player> players;
+
+    private Locale locale;
 }

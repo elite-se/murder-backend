@@ -5,6 +5,8 @@ import de.marvinbrieger.toothbrushgame.services.exceptions.AlreadySignedUpExcept
 import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Locale;
+
 public interface UserService {
     /**
      * Signs up an user.
@@ -21,4 +23,12 @@ public interface UserService {
      * @throws UserNotFoundException if the token used to authenticate is valid, but its user does not exist any more
      */
     void setPushToken(String token) throws UserNotFoundException;
+
+    /**
+     * Sets the preferred locale of the currently logged in user.
+     *
+     * @param locale new preferred locale of the user
+     * @throws UserNotFoundException if the token used to authenticate is valid, but its user does not exist any more
+     */
+    void setLocale(Locale locale) throws UserNotFoundException;
 }
