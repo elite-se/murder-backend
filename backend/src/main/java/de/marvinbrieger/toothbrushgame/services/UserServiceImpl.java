@@ -15,8 +15,8 @@ import java.util.Locale;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
-    private ApplicationUserRepository applicationUserRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ApplicationUserRepository applicationUserRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private CurrentUserService currentUserService;
 
     @Override

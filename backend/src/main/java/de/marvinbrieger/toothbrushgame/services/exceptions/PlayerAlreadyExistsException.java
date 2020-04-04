@@ -2,6 +2,10 @@ package de.marvinbrieger.toothbrushgame.services.exceptions;
 
 import de.marvinbrieger.toothbrushgame.domain.ApplicationUser;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.CONFLICT)
 public class PlayerAlreadyExistsException extends RuntimeException {
 
     public PlayerAlreadyExistsException(String playerName) {
