@@ -1,7 +1,6 @@
 package de.marvinbrieger.toothbrushgame.controller;
 
 import de.marvinbrieger.toothbrushgame.domain.Game;
-import de.marvinbrieger.toothbrushgame.services.exceptions.NoGameOwnerException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.GameService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +39,7 @@ public class GameController {
      * @see GameService#startGame(Long)
      */
     @PutMapping("/{id}/start")
-    public Game startGame(@PathVariable Long id) throws NoGameOwnerException {
+    public Game startGame(@PathVariable Long id) {
         return gameService.startGame(id);
     }
 
@@ -48,7 +47,7 @@ public class GameController {
      * @see GameService#endGame(Long)
      */
     @PutMapping("/{id}/end")
-    public Game endGame(@PathVariable Long id) throws NoGameOwnerException {
+    public Game endGame(@PathVariable Long id) {
         return gameService.endGame(id);
     }
 

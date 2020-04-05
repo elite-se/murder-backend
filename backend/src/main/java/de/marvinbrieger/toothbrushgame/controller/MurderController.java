@@ -1,7 +1,6 @@
 package de.marvinbrieger.toothbrushgame.controller;
 
 import de.marvinbrieger.toothbrushgame.domain.Murder;
-import de.marvinbrieger.toothbrushgame.services.exceptions.NotYourAssignmentException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.MurderService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,7 +16,7 @@ public class MurderController {
     }
 
     @PutMapping("/games/{gameId}/murderAssignments/{assignmentId}/murder")
-    Murder commitMurder(@PathVariable Long gameId, @PathVariable Long assignmentId) throws NotYourAssignmentException {
+    Murder commitMurder(@PathVariable Long gameId, @PathVariable Long assignmentId) {
         return murderService.commitMurder(gameId, assignmentId);
     }
 

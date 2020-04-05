@@ -3,7 +3,6 @@ package de.marvinbrieger.toothbrushgame.services;
 import de.marvinbrieger.toothbrushgame.domain.ApplicationUser;
 import de.marvinbrieger.toothbrushgame.persistence.ApplicationUserRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.AlreadySignedUpException;
-import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.UserService;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setPushToken(String token) throws UserNotFoundException {
+    public void setPushToken(String token) {
         ApplicationUser user = currentUserService.getCurrentUser();
         user.setPushToken(token);
         applicationUserRepository.save(user);
