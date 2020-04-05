@@ -52,11 +52,11 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         game.setPlayers(new ArrayList<>()); // api user could not add players
         game.setGameStatus(GameStatus.PREPARATION);
 
-        // the creator is also player in the game
-        Player creator = game.getOwner();
-        creator.setUser(currentUserService.getCurrentUser());
-        game.getPlayers().add(creator);
-        creator.setGame(game);
+        // the owner is also player in the game
+        Player owner = game.getOwner();
+        owner.setUser(currentUserService.getCurrentUser());
+        game.getPlayers().add(owner);
+        owner.setGame(game);
 
         return gameRepository.save(game);
     }
@@ -72,24 +72,27 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
 
     @Override
     public Game startGame(Long id) throws NoGameOwnerException {
-        var game = gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
-                .orElseThrow(() -> new GameNotFoundException(id, GameStatus.PREPARATION));
-        ensureRequestedByGameOwner(game);
-        game.setGameStatus(GameStatus.RUNNING);
-        List<MurderAssignment> murderAssignments = assignmentHelperService.generateKillAssignments(game);
+        return gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
+                .map(game -> {
+                    ensureRequestedByGameOwner(game);
+                    game.setGameStatus(GameStatus.RUNNING);
+                    List<MurderAssignment> murderAssignments = assignmentHelperService.generateKillAssignments(game);
         game.setMurderAssignments(murderAssignments);
         murderAssignmentNotificationService.pushMurderAssignments(murderAssignments);
-        return gameRepository.save(game);
+                    return gameRepository.save(game);
+                })
+                .orElseThrow(() -> new GameNotFoundException(id, GameStatus.PREPARATION));
     }
 
     @Override
     public Game endGame(Long id) throws NoGameOwnerException {
-        Game game = gameRepository.findByIdAndGameStatus(id, GameStatus.RUNNING)
+        return gameRepository.findByIdAndGameStatus(id, GameStatus.RUNNING)
+                .map(game -> {
+                    ensureRequestedByGameOwner(game);
+                    game.setGameStatus(GameStatus.FINISHED);
+                    gameEndedNotificationService.pushGameEnding(game);
+        return gameRepository.save(game);})
                 .orElseThrow(() -> new GameNotFoundException(id, GameStatus.RUNNING));
-        ensureRequestedByGameOwner(game);
-        game.setGameStatus(GameStatus.FINISHED);
-        gameEndedNotificationService.pushGameEnding(game);
-        return gameRepository.save(game);
     }
 
 }
