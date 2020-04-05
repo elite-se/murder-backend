@@ -14,7 +14,7 @@ public class CurrentUserServiceImpl implements CurrentUserService {
     private ApplicationUserRepository applicationUserRepository;
 
     @Override
-    public ApplicationUser getCurrentUser() throws UserNotFoundException {
+    public ApplicationUser getCurrentUser() {
         String deviceId = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         ApplicationUser user = applicationUserRepository.findByDeviceId(deviceId);
         if (user == null) throw new UserNotFoundException(deviceId);

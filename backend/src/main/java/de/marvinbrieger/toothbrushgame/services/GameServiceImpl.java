@@ -11,7 +11,6 @@ import de.marvinbrieger.toothbrushgame.services.exceptions.NoGameOwnerException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
                 .orElseThrow(() -> new GameNotFoundException(gameCode));
     }
 
-    @SneakyThrows(UserNotFoundException.class)
     @Override
     public Game createGame(Game game) {
         String gameCode = gameCodeService.getNewGameCode();
@@ -59,7 +57,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         return gameRepository.save(game);
     }
 
-    private void ensureRequestedByGameOwner(Game game) throws NoGameOwnerException {
+    private void ensureRequestedByGameOwner(Game game) {
         try {
             if (!currentUserService.getCurrentUser().equals(game.getOwner().getUser()))
                 throw new NoGameOwnerException();
@@ -69,7 +67,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     }
 
     @Override
-    public Game startGame(Long id) throws NoGameOwnerException {
+    public Game startGame(Long id) {
         return gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
                 .map(game -> {
                     ensureRequestedByGameOwner(game);
@@ -81,7 +79,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     }
 
     @Override
-    public Game endGame(Long id) throws NoGameOwnerException {
+    public Game endGame(Long id) {
         return gameRepository.findByIdAndGameStatus(id, GameStatus.RUNNING)
                 .map(game -> {
                     ensureRequestedByGameOwner(game);

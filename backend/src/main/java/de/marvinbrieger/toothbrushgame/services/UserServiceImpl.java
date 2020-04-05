@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private CurrentUserService currentUserService;
 
     @Override
-    public void signUp(ApplicationUser user) throws AlreadySignedUpException {
+    public void signUp(ApplicationUser user) {
         if (applicationUserRepository.findByDeviceId(user.getDeviceId()) != null)
             throw new AlreadySignedUpException(user.getDeviceId());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

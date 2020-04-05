@@ -47,7 +47,7 @@ public class MurderServiceImpl implements MurderService {
     }
 
     @Override
-    public Murder commitMurder(Long gameId, Long assignmentId) throws NotYourAssignmentException {
+    public Murder commitMurder(Long gameId, Long assignmentId) {
         Game game = gameRepository.findByIdAndGameStatus(gameId, GameStatus.RUNNING)
                 .orElseThrow(() -> new GameNotFoundException(gameId));
 
