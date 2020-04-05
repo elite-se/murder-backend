@@ -19,9 +19,9 @@ public class GameCodeService {
         this.gameRepository = gameRepository;
     }
 
-    private final int GAME_CODE_LENGTH = 6;
+    private static final int GAME_CODE_LENGTH = 6;
 
-    private final int FAILURE_THRESHOLD = 20;
+    private static final int FAILURE_THRESHOLD = 20;
 
     /**
      * Generates a random string of the given length.
