@@ -6,9 +6,10 @@ import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.push.interfaces.GameEndedNotificationService;
 import de.marvinbrieger.toothbrushgame.push.interfaces.MurderAssignmentNotificationService;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
-import de.marvinbrieger.toothbrushgame.services.exceptions.NoGameOwnerException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.NotGameOwnerException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
+import de.marvinbrieger.toothbrushgame.services.interfaces.EnsureGameOwnerService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     private final CurrentUserService currentUserService;
     private final MurderAssignmentNotificationService murderAssignmentNotificationService;
     private final GameEndedNotificationService gameEndedNotificationService;
+    private final EnsureGameOwnerService ensureGameOwnerService;
 
     @Override
     public Game getGameById(Long id) {
@@ -61,20 +63,13 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         return gameRepository.save(game);
     }
 
-    private void ensureRequestedByGameOwner(Game game) throws NoGameOwnerException {
-        try {
-            if (!currentUserService.getCurrentUser().equals(game.getOwner().getUser()))
-                throw new NoGameOwnerException();
-        } catch (UserNotFoundException e) {
-            throw new NoGameOwnerException(e);
-        }
-    }
+
 
     @Override
-    public Game startGame(Long id) throws NoGameOwnerException {
+    public Game startGame(Long id) {
         return gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
                 .map(game -> {
-                    ensureRequestedByGameOwner(game);
+                    ensureGameOwnerService.ensureRequestedByGameOwner(game);
                     game.setGameStatus(GameStatus.RUNNING);
                     List<MurderAssignment> murderAssignments = assignmentHelperService.generateKillAssignments(game);
         game.setMurderAssignments(murderAssignments);
@@ -85,10 +80,10 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     }
 
     @Override
-    public Game endGame(Long id) throws NoGameOwnerException {
+    public Game endGame(Long id) throws NotGameOwnerException {
         return gameRepository.findByIdAndGameStatus(id, GameStatus.RUNNING)
                 .map(game -> {
-                    ensureRequestedByGameOwner(game);
+                    ensureGameOwnerService.ensureRequestedByGameOwner(game);
                     game.setGameStatus(GameStatus.FINISHED);
                     gameEndedNotificationService.pushGameEnding(game);
         return gameRepository.save(game);})
