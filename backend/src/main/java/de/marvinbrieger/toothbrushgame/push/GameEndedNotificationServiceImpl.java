@@ -32,7 +32,7 @@ public class GameEndedNotificationServiceImpl extends BaseNotificationService im
                 .entrySet().parallelStream()
                 .map(entry -> buildMessage(entry.getKey().orElse(null), entry.getValue(), game))
                 .collect(Collectors.toUnmodifiableList());
-        sendAndLog(messages);
+        sendAndLogFailures(messages);
     }
 
     private static ExpoPushMessage buildMessage(Locale locale, List<ApplicationUser> users, Game game) {

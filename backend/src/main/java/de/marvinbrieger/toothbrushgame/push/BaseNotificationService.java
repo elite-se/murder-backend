@@ -21,7 +21,7 @@ public class BaseNotificationService {
     protected static final String GAME_ID_KEY = "gameId";
     protected final ExpoPushService pushService;
 
-    protected void sendAndLog (List<ExpoPushMessage> messages) {
+    protected void sendAndLogFailures(List<ExpoPushMessage> messages) {
         pushService.sendMessagesAsync(messages)
                 .thenAccept(MurderAssignmentNotificationServiceImpl::logFailures);
     }

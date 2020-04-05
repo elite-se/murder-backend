@@ -21,7 +21,7 @@ public class MurderAssignmentNotificationServiceImpl extends BaseNotificationSer
 
     @Override
     public void pushMurderAssignments(Collection<MurderAssignment> murderAssignments) {
-        super.sendAndLog(murderAssignments.parallelStream()
+        super.sendAndLogFailures(murderAssignments.parallelStream()
                 .map(MurderAssignmentNotificationServiceImpl::buildMessage)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
