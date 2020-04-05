@@ -7,11 +7,9 @@ import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.persistence.PlayerRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
-import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.PlayerService;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +19,6 @@ public class PlayerServiceImpl implements PlayerService {
     private final GameRepository gameRepository;
     private final CurrentUserService currentUserService;
 
-    @SneakyThrows(UserNotFoundException.class)
     @Override
     public Player joinGame(Long gameId, Player player) {
         Game gameToJoin = gameRepository.findById(gameId)

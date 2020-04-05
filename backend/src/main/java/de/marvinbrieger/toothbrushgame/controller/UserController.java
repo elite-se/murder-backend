@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PutMapping("/locale")
-    public void setLocale(@RequestBody String languageTag) throws UserNotFoundException {
+    public void setLocale(@RequestBody String languageTag) {
         Locale locale = Locale.forLanguageTag(languageTag);
         userService.setLocale(locale);
     }

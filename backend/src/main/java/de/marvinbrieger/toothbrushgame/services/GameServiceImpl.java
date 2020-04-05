@@ -6,12 +6,9 @@ import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.push.interfaces.GameEndedNotificationService;
 import de.marvinbrieger.toothbrushgame.push.interfaces.MurderAssignmentNotificationService;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
-import de.marvinbrieger.toothbrushgame.services.exceptions.NotGameOwnerException;
-import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.EnsureGameOwnerService;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,7 +42,6 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
                 .orElseThrow(() -> new GameNotFoundException(gameCode));
     }
 
-    @SneakyThrows(UserNotFoundException.class)
     @Override
     public Game createGame(Game game) {
         String gameCode = gameCodeService.getNewGameCode();
@@ -80,7 +76,7 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     }
 
     @Override
-    public Game endGame(Long id) throws NotGameOwnerException {
+    public Game endGame(Long id) {
         return gameRepository.findByIdAndGameStatus(id, GameStatus.RUNNING)
                 .map(game -> {
                     ensureGameOwnerService.ensureRequestedByGameOwner(game);

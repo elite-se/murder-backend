@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setLocale(Locale locale) throws UserNotFoundException {
+    public void setLocale(Locale locale) {
         ApplicationUser user = currentUserService.getCurrentUser();
         user.setLocale(locale);
         applicationUserRepository.save(user);
