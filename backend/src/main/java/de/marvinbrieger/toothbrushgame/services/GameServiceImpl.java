@@ -50,11 +50,11 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         game.setPlayers(new ArrayList<>()); // api user could not add players
         game.setGameStatus(GameStatus.PREPARATION);
 
-        // the creator is also player in the game
-        Player creator = game.getOwner();
-        creator.setUser(currentUserService.getCurrentUser());
-        game.getPlayers().add(creator);
-        creator.setGame(game);
+        // the owner is also player in the game
+        Player owner = game.getOwner();
+        owner.setUser(currentUserService.getCurrentUser());
+        game.getPlayers().add(owner);
+        owner.setGame(game);
 
         return gameRepository.save(game);
     }
