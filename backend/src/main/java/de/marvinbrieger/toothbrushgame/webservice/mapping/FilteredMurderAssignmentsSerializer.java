@@ -1,4 +1,4 @@
-package de.marvinbrieger.toothbrushgame.controller.mapping;
+package de.marvinbrieger.toothbrushgame.webservice.mapping;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

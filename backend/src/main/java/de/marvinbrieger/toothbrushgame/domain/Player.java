@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -31,4 +29,16 @@ public class Player {
     @JsonIgnore // contains sensitive data
     @ManyToOne
     private ApplicationUser user;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "killer")
+    private List<MurderAssignment> assignments;
+
+    @JsonIgnore
+    public MurderAssignment getCurrentAssignment() {
+        return assignments.parallelStream()
+                .filter(assignment -> assignment.getAssignmentStatus() == MurderAssignmentStatus.PENDING)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No pending assignment available"));
+    }
 }

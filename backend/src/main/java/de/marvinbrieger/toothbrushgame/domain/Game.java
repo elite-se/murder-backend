@@ -2,7 +2,9 @@ package de.marvinbrieger.toothbrushgame.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.marvinbrieger.toothbrushgame.controller.mapping.FilteredMurderAssignmentsSerializer;
+import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.MurderAssignmentNotFoundException;
+import de.marvinbrieger.toothbrushgame.webservice.mapping.FilteredMurderAssignmentsSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -55,4 +57,38 @@ public class Game {
         return gameStatus == GameStatus.RUNNING;
     }
 
+    private MurderAssignment findSuccessor(MurderAssignment source) {
+        for (MurderAssignment potentialSuccessor : murderAssignments)
+            if (source.hasSuccessor(potentialSuccessor))
+                return potentialSuccessor;
+
+        throw new IllegalArgumentException();
+    }
+
+    private void addSucceedingAssignment(MurderAssignment currentAssignment) {
+        Player killer = currentAssignment.getKiller();
+        MurderAssignment targetsAssignment = findSuccessor(currentAssignment);
+
+        MurderAssignment killersNewMission = new MurderAssignment(null, this, killer, targetsAssignment.getTarget(),
+                MurderAssignmentStatus.PENDING, null);
+
+        getMurderAssignments().add(killersNewMission);
+    }
+
+    public void commitMurder(Long assignmentId) {
+        // ensure game is running
+        if (!this.isRunning())
+            throw new GameNotFoundException(this.getId(), GameStatus.RUNNING);
+
+        // get the assignment
+        MurderAssignment assignment = this.murderAssignments.parallelStream()
+                .filter(assig -> assig.getId().equals(assignmentId))
+                .findAny()
+                .orElseThrow(() -> new MurderAssignmentNotFoundException(assignmentId));
+
+        // commit murder and add new assignment fur the killer
+        assignment.commitMurder();
+        assignment.getTarget().getCurrentAssignment().setAssignmentStatus(MurderAssignmentStatus.FAILED);
+        addSucceedingAssignment(assignment);
+    }
 }
