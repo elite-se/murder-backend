@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -48,6 +49,29 @@ public class Game {
     )
     @JsonSerialize(using = FilteredMurderAssignmentsSerializer.class)
     private List<MurderAssignment> murderAssignments;
+
+    /**
+     * Creates a new game with the given game code, the title and preferences as the given game, the status {@link GameStatus#PREPARATION},
+     * an empty assignments list and a player list containing only the owner.
+     * The owner is a new player (see {@link Player#Player(Player, Game, ApplicationUser)}) based on the owner of the given game,
+     * belonging to the user {@code creator}.
+     *
+     * @param game     An object providing some of the information reused in the created game.
+     * @param gameCode The game code of the created game.
+     * @param creator  The user creating the game. Will be the user of the owner property of the created game.
+     */
+    public Game(Game game, String gameCode, ApplicationUser creator) {
+        this.title = game.getTitle();
+        this.preferences = game.getPreferences();
+        this.gameCode = gameCode;
+        this.gameStatus = GameStatus.PREPARATION;
+        this.players = new ArrayList<>();
+        this.murderAssignments = new ArrayList<>();
+        this.owner = new Player(game.getOwner(), this, creator);
+
+        // owner is also a player
+        this.players.add(this.owner);
+    }
 
     public boolean inPreparation() {
         return gameStatus == GameStatus.PREPARATION;

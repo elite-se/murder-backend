@@ -1,7 +1,10 @@
 package de.marvinbrieger.toothbrushgame.services;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import de.marvinbrieger.toothbrushgame.domain.*;
+import de.marvinbrieger.toothbrushgame.domain.Game;
+import de.marvinbrieger.toothbrushgame.domain.GameStatus;
+import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
+import de.marvinbrieger.toothbrushgame.domain.QGame;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.push.interfaces.GameEndedNotificationService;
 import de.marvinbrieger.toothbrushgame.push.interfaces.MurderAssignmentNotificationService;
@@ -11,7 +14,6 @@ import de.marvinbrieger.toothbrushgame.services.interfaces.EnsureGameOwnerServic
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,18 +47,8 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     @Override
     public Game createGame(Game game) {
         String gameCode = gameCodeService.getNewGameCode();
-        game.setGameCode(gameCode);
-
-        game.setPlayers(new ArrayList<>()); // api user could not add players
-        game.setGameStatus(GameStatus.PREPARATION);
-
-        // the owner is also player in the game
-        Player owner = game.getOwner();
-        owner.setUser(currentUserService.getCurrentUser());
-        game.getPlayers().add(owner);
-        owner.setGame(game);
-
-        return gameRepository.save(game);
+        Game newGame = new Game(game, gameCode, currentUserService.getCurrentUser());
+        return gameRepository.save(newGame);
     }
 
     @Override
