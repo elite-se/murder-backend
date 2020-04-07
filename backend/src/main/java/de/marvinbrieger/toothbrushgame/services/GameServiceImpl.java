@@ -53,27 +53,26 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
 
     @Override
     public Game startGame(Long id) {
-        return gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
+        return gameRepository.findById(id)
                 .map(game -> {
                     ensureGameOwnerService.ensureRequestedByGameOwner(game);
-                    game.setGameStatus(GameStatus.RUNNING);
                     List<MurderAssignment> murderAssignments = assignmentHelperService.generateKillAssignments(game);
-        game.setMurderAssignments(murderAssignments);
-        murderAssignmentNotificationService.pushMurderAssignments(murderAssignments);
+                    game.start(murderAssignments);
+                    murderAssignmentNotificationService.pushMurderAssignments(murderAssignments);
                     return gameRepository.save(game);
                 })
-                .orElseThrow(() -> new GameNotFoundException(id, GameStatus.PREPARATION));
+                .orElseThrow(() -> new GameNotFoundException(id));
     }
 
     @Override
     public Game endGame(Long id) {
-        return gameRepository.findByIdAndGameStatus(id, GameStatus.RUNNING)
+        return gameRepository.findById(id)
                 .map(game -> {
                     ensureGameOwnerService.ensureRequestedByGameOwner(game);
-                    game.setGameStatus(GameStatus.FINISHED);
+                    game.end();
                     gameEndedNotificationService.pushGameEnding(game);
         return gameRepository.save(game);})
-                .orElseThrow(() -> new GameNotFoundException(id, GameStatus.RUNNING));
+                .orElseThrow(() -> new GameNotFoundException(id));
     }
 
 }

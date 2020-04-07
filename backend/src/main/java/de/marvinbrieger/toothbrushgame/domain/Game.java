@@ -2,7 +2,7 @@ package de.marvinbrieger.toothbrushgame.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.GameInWrongStateException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.MurderAssignmentNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
 import de.marvinbrieger.toothbrushgame.webservice.mapping.FilteredMurderAssignmentsSerializer;
@@ -100,10 +100,17 @@ public class Game {
         getMurderAssignments().add(killersNewMission);
     }
 
+    /**
+     * Fulfills the assignment with given ID.
+     * @param assignmentId ID of the assignment that is fulfilled
+     * @throws GameInWrongStateException if the game is not running
+     * @throws MurderAssignmentNotFoundException if there is no assignment with that ID that is part of the game
+     * @see MurderAssignment#commitMurder()
+     */
     public void commitMurder(Long assignmentId) {
         // ensure game is running
         if (!this.isRunning())
-            throw new GameNotFoundException(this.getId(), GameStatus.RUNNING);
+            throw new GameInWrongStateException(GameStatus.RUNNING, getGameStatus());
 
         // get the assignment
         MurderAssignment assignment = this.murderAssignments.parallelStream()
@@ -117,10 +124,16 @@ public class Game {
         addSucceedingAssignment(assignment);
     }
 
+    /**
+     * Lets the given player join the game.
+     * @param player the joining player
+     * @throws GameInWrongStateException if the game is not in preparation
+     * @throws PlayerAlreadyExistsException if there is already a player with the same name or user in the game
+     */
     public void addPlayer(Player player) {
         // check game state
         if (!inPreparation())
-            throw new GameNotFoundException(this.getId(), GameStatus.PREPARATION);
+            throw new GameInWrongStateException(GameStatus.PREPARATION, getGameStatus());
 
         // check neither player with same name nor with same user has already joined
         boolean playerNameAlreadyExists = players.parallelStream()
@@ -135,5 +148,29 @@ public class Game {
 
         // add player
         players.add(player);
+    }
+
+    /**
+     * Starts the game if it currently is in preparation and sets the assignments to the given value.
+     * @param assignments the new value of the {@link #murderAssignments} property
+     * @throws GameInWrongStateException if the game is not in preparation
+     */
+    public void start(List<MurderAssignment> assignments) {
+        // check and update state
+        if (inPreparation())
+            throw new GameInWrongStateException(GameStatus.PREPARATION, getGameStatus());
+        setGameStatus(GameStatus.RUNNING);
+
+        setMurderAssignments(assignments);
+    }
+
+    /**
+     * Ends the game.
+     * @throws GameInWrongStateException if the game is not running
+     */
+    public void end() {
+        if (isRunning())
+            throw new GameInWrongStateException(GameStatus.RUNNING, getGameStatus());
+        setGameStatus(GameStatus.FINISHED);
     }
 }
