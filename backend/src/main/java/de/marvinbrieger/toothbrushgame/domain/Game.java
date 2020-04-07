@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.exceptions.MurderAssignmentNotFoundException;
+import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
 import de.marvinbrieger.toothbrushgame.webservice.mapping.FilteredMurderAssignmentsSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -90,5 +91,25 @@ public class Game {
         assignment.commitMurder();
         assignment.getTarget().getCurrentAssignment().setAssignmentStatus(MurderAssignmentStatus.FAILED);
         addSucceedingAssignment(assignment);
+    }
+
+    public void addPlayer(Player player) {
+        // check game state
+        if (!inPreparation())
+            throw new GameNotFoundException(this.getId(), GameStatus.PREPARATION);
+
+        // check neither player with same name nor with same user has already joined
+        boolean playerNameAlreadyExists = players.parallelStream()
+                .anyMatch(p -> p.getPlayerName().equalsIgnoreCase(player.getPlayerName()));
+        if (playerNameAlreadyExists)
+            throw new PlayerAlreadyExistsException(player.getPlayerName());
+
+        boolean userAlreadyJoined = players.parallelStream()
+                .anyMatch(p -> p.getUser().equals(player.getUser()));
+        if (userAlreadyJoined)
+            throw new PlayerAlreadyExistsException(player.getUser());
+
+        // add player
+        players.add(player);
     }
 }

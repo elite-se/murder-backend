@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -33,6 +34,18 @@ public class Player {
     @JsonIgnore
     @OneToMany(mappedBy = "killer")
     private List<MurderAssignment> assignments;
+
+    /**
+     * Creates a new player belonging to the given game and the given user, an empty assignments list and the same name as the name of
+     * {@code player}.
+     *
+     * @param player Player object with the data to copy
+     * @param game   the game of the new player
+     * @param user   belonging to the new player
+     */
+    public Player(Player player, Game game, ApplicationUser user) {
+        this(null, game, player.getPlayerName(), user, new LinkedList<>());
+    }
 
     @JsonIgnore
     public MurderAssignment getCurrentAssignment() {
