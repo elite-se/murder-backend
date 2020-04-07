@@ -1,6 +1,7 @@
 package de.marvinbrieger.toothbrushgame.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.marvinbrieger.toothbrushgame.services.exceptions.MurderAssignmentNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,9 @@ public class MurderAssignment {
     }
 
     public void commitMurder() {
+        if (this.getAssignmentStatus() != MurderAssignmentStatus.PENDING)
+            throw new MurderAssignmentNotFoundException(this.getId(), MurderAssignmentStatus.PENDING);
+
         Murder murder = new Murder(null, Instant.now(), this);
         this.setMurder(murder);
         this.setAssignmentStatus(MurderAssignmentStatus.FULFILLED);

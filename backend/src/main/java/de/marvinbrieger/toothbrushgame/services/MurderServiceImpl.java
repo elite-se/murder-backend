@@ -3,7 +3,6 @@ package de.marvinbrieger.toothbrushgame.services;
 import de.marvinbrieger.toothbrushgame.domain.GameStatus;
 import de.marvinbrieger.toothbrushgame.domain.Murder;
 import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
-import de.marvinbrieger.toothbrushgame.domain.MurderAssignmentStatus;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.persistence.MurderAssignmentRepository;
 import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
@@ -25,7 +24,7 @@ public class MurderServiceImpl implements MurderService {
     @Override
     public Murder commitMurder(Long gameId, Long assignmentId) {
         MurderAssignment currentMurderAssignment = murderAssignmentRepository
-                .findByIdAndAssignmentStatus(assignmentId, MurderAssignmentStatus.PENDING)
+                .findById(assignmentId)
                 .orElseThrow(() -> new MurderAssignmentNotFoundException(assignmentId));
 
         if (!currentUserService.getCurrentUser().equals(currentMurderAssignment.getKiller().getUser()))
