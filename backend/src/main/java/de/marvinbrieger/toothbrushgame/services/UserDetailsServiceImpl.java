@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String deviceId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String deviceId) {
         ApplicationUser applicationUser = applicationUserRepository.findByDeviceId(deviceId);
         if (applicationUser == null) throw new UsernameNotFoundException(deviceId);
         return new User(applicationUser.getDeviceId(), applicationUser.getPassword(), Collections.emptyList());

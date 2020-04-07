@@ -59,8 +59,6 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
         return gameRepository.save(game);
     }
 
-
-
     @Override
     public Game startGame(Long id) {
         return gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
