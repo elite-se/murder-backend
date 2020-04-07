@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -28,6 +30,13 @@ public class UserServiceImpl implements UserService {
     public void setPushToken(String token) {
         ApplicationUser user = currentUserService.getCurrentUser();
         user.setPushToken(token);
+        applicationUserRepository.save(user);
+    }
+
+    @Override
+    public void setLocale(Locale locale) {
+        ApplicationUser user = currentUserService.getCurrentUser();
+        user.setLocale(locale);
         applicationUserRepository.save(user);
     }
 }
