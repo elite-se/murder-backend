@@ -1,10 +1,11 @@
-package de.marvinbrieger.toothbrushgame.push;
+package de.marvinbrieger.toothbrushgame.push.expobroadcasting;
 
-import de.marvinbrieger.toothbrushgame.push.interfaces.ExpoPushService;
 import io.github.jav.exposerversdk.ExpoPushMessage;
 import io.github.jav.exposerversdk.ExpoPushTicket;
 import io.github.jav.exposerversdk.PushClient;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ExpoPushServiceImpl implements ExpoPushService {
+class ExpoPushServiceImpl implements ExpoPushService {
+    private static final Logger logger = LoggerFactory.getLogger(ExpoPushServiceImpl.class);
     private PushClient pushClient;
 
     @Override
@@ -45,5 +47,19 @@ public class ExpoPushServiceImpl implements ExpoPushService {
                 throw new RuntimeException(e);
             }
         }).collect(Collectors.toUnmodifiableList()));
+    }
+
+    @Override
+    public void sendMessagesAndLogFailures(Collection<ExpoPushMessage> messages) {
+        sendMessagesAsync(messages)
+                .thenAccept(expoPushTickets ->
+                        expoPushTickets.forEach(ExpoPushServiceImpl::logFailure)
+                );
+    }
+
+    private static void logFailure(ExpoPushTicket expoPushTicket) {
+        if (!"ok".equalsIgnoreCase(expoPushTicket.status)) {
+            logger.info("Failed to deliver push message: ${}", expoPushTicket.message);
+        }
     }
 }

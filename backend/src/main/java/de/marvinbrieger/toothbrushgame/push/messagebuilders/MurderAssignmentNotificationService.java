@@ -1,4 +1,4 @@
-package de.marvinbrieger.toothbrushgame.push.interfaces;
+package de.marvinbrieger.toothbrushgame.push.messagebuilders;
 
 import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
 
