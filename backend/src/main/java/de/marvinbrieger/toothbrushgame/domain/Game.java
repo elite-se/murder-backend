@@ -118,7 +118,7 @@ public class Game {
                 .findAny()
                 .orElseThrow(() -> new MurderAssignmentNotFoundException(assignmentId));
 
-        // commit murder and add new assignment fur the killer
+        // commit murder and add new assignment for the killer
         assignment.commitMurder();
         assignment.getTarget().getCurrentAssignment().setAssignmentStatus(MurderAssignmentStatus.FAILED);
         addSucceedingAssignment(assignment);

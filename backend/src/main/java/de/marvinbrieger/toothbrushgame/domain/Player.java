@@ -1,6 +1,7 @@
 package de.marvinbrieger.toothbrushgame.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.marvinbrieger.toothbrushgame.exceptions.NoPendingAssignmentException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,6 @@ public class Player {
         return assignments.parallelStream()
                 .filter(assignment -> assignment.getAssignmentStatus() == MurderAssignmentStatus.PENDING)
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No pending assignment available"));
+                .orElseThrow(() -> new NoPendingAssignmentException(this));
     }
 }
