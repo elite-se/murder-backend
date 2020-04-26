@@ -3,8 +3,8 @@ package de.marvinbrieger.toothbrushgame.services;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import de.marvinbrieger.toothbrushgame.domain.GameStatus;
 import de.marvinbrieger.toothbrushgame.domain.QGame;
+import de.marvinbrieger.toothbrushgame.exceptions.NoGameCodeAvailableException;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
-import de.marvinbrieger.toothbrushgame.services.exceptions.NoGameCodeAvailableException;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,4 +1,4 @@
-package de.marvinbrieger.toothbrushgame.services.exceptions;
+package de.marvinbrieger.toothbrushgame.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -2,9 +2,9 @@ package de.marvinbrieger.toothbrushgame.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.marvinbrieger.toothbrushgame.services.exceptions.GameInWrongStateException;
-import de.marvinbrieger.toothbrushgame.services.exceptions.MurderAssignmentNotFoundException;
-import de.marvinbrieger.toothbrushgame.services.exceptions.PlayerAlreadyExistsException;
+import de.marvinbrieger.toothbrushgame.exceptions.GameInWrongStateException;
+import de.marvinbrieger.toothbrushgame.exceptions.MurderAssignmentNotFoundException;
+import de.marvinbrieger.toothbrushgame.exceptions.PlayerAlreadyExistsException;
 import de.marvinbrieger.toothbrushgame.webservice.mapping.FilteredMurderAssignmentsSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -152,7 +152,7 @@ public class Game {
 
     /**
      * Starts the game if it currently is in preparation and sets the assignments to the given value.
-     
+
      * @param assignments the new value of the {@link #murderAssignments} property
      * @throws GameInWrongStateException if the game is not in preparation
      */

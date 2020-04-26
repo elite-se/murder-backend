@@ -1,8 +1,8 @@
 package de.marvinbrieger.toothbrushgame.services;
 
 import de.marvinbrieger.toothbrushgame.domain.Game;
-import de.marvinbrieger.toothbrushgame.services.exceptions.NotGameOwnerException;
-import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
+import de.marvinbrieger.toothbrushgame.exceptions.NotGameOwnerException;
+import de.marvinbrieger.toothbrushgame.exceptions.UserNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.EnsureGameOwnerService;
 import lombok.AllArgsConstructor;

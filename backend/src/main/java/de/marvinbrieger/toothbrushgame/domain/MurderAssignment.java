@@ -1,7 +1,7 @@
 package de.marvinbrieger.toothbrushgame.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.marvinbrieger.toothbrushgame.services.exceptions.MurderAssignmentNotFoundException;
+import de.marvinbrieger.toothbrushgame.exceptions.MurderAssignmentNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

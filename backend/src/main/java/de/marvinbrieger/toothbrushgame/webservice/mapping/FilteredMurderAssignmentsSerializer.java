@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import de.marvinbrieger.toothbrushgame.domain.ApplicationUser;
 import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
 import de.marvinbrieger.toothbrushgame.domain.MurderAssignmentStatus;
-import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
+import de.marvinbrieger.toothbrushgame.exceptions.UserNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,8 @@
 package de.marvinbrieger.toothbrushgame.services;
 
 import de.marvinbrieger.toothbrushgame.domain.ApplicationUser;
+import de.marvinbrieger.toothbrushgame.exceptions.AlreadySignedUpException;
 import de.marvinbrieger.toothbrushgame.persistence.ApplicationUserRepository;
-import de.marvinbrieger.toothbrushgame.services.exceptions.AlreadySignedUpException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.UserService;
 import lombok.AllArgsConstructor;
