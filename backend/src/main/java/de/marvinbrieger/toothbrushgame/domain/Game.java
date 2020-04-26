@@ -152,6 +152,7 @@ public class Game {
 
     /**
      * Starts the game if it currently is in preparation and sets the assignments to the given value.
+     
      * @param assignments the new value of the {@link #murderAssignments} property
      * @throws GameInWrongStateException if the game is not in preparation
      */
