@@ -1,11 +1,11 @@
-package de.marvinbrieger.toothbrushgame.push;
+package de.marvinbrieger.toothbrushgame.push.messagebuilders;
 
 import de.marvinbrieger.toothbrushgame.domain.ApplicationUser;
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.domain.Player;
-import de.marvinbrieger.toothbrushgame.push.interfaces.ExpoPushService;
-import de.marvinbrieger.toothbrushgame.push.interfaces.GameEndedNotificationService;
+import de.marvinbrieger.toothbrushgame.push.expobroadcasting.ExpoPushService;
 import io.github.jav.exposerversdk.ExpoPushMessage;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,14 +15,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class GameEndedNotificationServiceImpl extends BaseNotificationService implements GameEndedNotificationService {
+@AllArgsConstructor
+class GameEndedNotificationServiceImpl implements GameEndedNotificationService {
     private static final String TYPE_VALUE = "GAME_ENDED";
     private static final String NOTIFICATION_GAME_END_BODY = "notification.gameEnd.body";
-
-    public GameEndedNotificationServiceImpl(ExpoPushService pushService) {
-        super(pushService);
-    }
-
+    private final ExpoPushService pushService;
+    private final NotificationBundleProvider notificationBundleProvider;
+    private final ExpoMessagePreparer expoMessagePreparer;
 
     @Override
     public void pushGameEnding(Game game) {
@@ -32,18 +31,18 @@ public class GameEndedNotificationServiceImpl extends BaseNotificationService im
                 .entrySet().parallelStream()
                 .map(entry -> buildMessage(entry.getKey().orElse(null), entry.getValue(), game))
                 .collect(Collectors.toUnmodifiableList());
-        sendAndLogFailures(messages);
+        pushService.sendMessagesAndLogFailures(messages);
     }
 
-    private static ExpoPushMessage buildMessage(Locale locale, List<ApplicationUser> users, Game game) {
+    private ExpoPushMessage buildMessage(Locale locale, List<ApplicationUser> users, Game game) {
         var tokens = users.parallelStream()
                 .map(ApplicationUser::getPushToken)
                 .filter(Objects::nonNull)
                 .toArray(String[]::new);
 
-        ExpoPushMessage msg = prepareMessage(TYPE_VALUE, game, tokens);
+        ExpoPushMessage msg = expoMessagePreparer.prepareMessage(TYPE_VALUE, game, tokens);
 
-        var bundle = getNotificationMessages(locale);
+        var bundle = notificationBundleProvider.getBundle(locale);
         msg.body = bundle.getString(NOTIFICATION_GAME_END_BODY);
 
         return msg;
