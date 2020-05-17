@@ -1,4 +1,4 @@
-package de.marvinbrieger.toothbrushgame.controller;
+package de.marvinbrieger.toothbrushgame.webservice;
 
 import de.marvinbrieger.toothbrushgame.domain.Game;
 import de.marvinbrieger.toothbrushgame.services.interfaces.GameService;

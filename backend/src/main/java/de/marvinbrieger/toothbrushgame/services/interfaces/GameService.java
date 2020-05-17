@@ -1,7 +1,7 @@
 package de.marvinbrieger.toothbrushgame.services.interfaces;
 
 import de.marvinbrieger.toothbrushgame.domain.Game;
-import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
+import de.marvinbrieger.toothbrushgame.exceptions.GameNotFoundException;
 
 public interface GameService {
 

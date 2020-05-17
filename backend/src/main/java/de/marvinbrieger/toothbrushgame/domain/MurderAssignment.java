@@ -1,17 +1,14 @@
 package de.marvinbrieger.toothbrushgame.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.marvinbrieger.toothbrushgame.exceptions.MurderAssignmentNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -45,8 +42,17 @@ public class MurderAssignment {
         return assignmentStatus == MurderAssignmentStatus.PENDING;
     }
 
+
     public boolean hasSuccessor(MurderAssignment assignment) {
         return target.equals(assignment.killer) && assignment.isPending();
     }
 
+    public void commitMurder() {
+        if (this.getAssignmentStatus() != MurderAssignmentStatus.PENDING)
+            throw new MurderAssignmentNotFoundException(this.getId(), MurderAssignmentStatus.PENDING);
+
+        Murder murder = new Murder(null, Instant.now(), this);
+        this.setMurder(murder);
+        this.setAssignmentStatus(MurderAssignmentStatus.FULFILLED);
+    }
 }

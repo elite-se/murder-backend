@@ -1,17 +1,19 @@
 package de.marvinbrieger.toothbrushgame.services;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import de.marvinbrieger.toothbrushgame.domain.*;
+import de.marvinbrieger.toothbrushgame.domain.Game;
+import de.marvinbrieger.toothbrushgame.domain.GameStatus;
+import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
+import de.marvinbrieger.toothbrushgame.domain.QGame;
+import de.marvinbrieger.toothbrushgame.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.persistence.GameRepository;
 import de.marvinbrieger.toothbrushgame.push.messagebuilders.GameEndedNotificationService;
 import de.marvinbrieger.toothbrushgame.push.messagebuilders.MurderAssignmentNotificationService;
-import de.marvinbrieger.toothbrushgame.services.exceptions.GameNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.EnsureGameOwnerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,43 +47,32 @@ public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services
     @Override
     public Game createGame(Game game) {
         String gameCode = gameCodeService.getNewGameCode();
-        game.setGameCode(gameCode);
-
-        game.setPlayers(new ArrayList<>()); // api user could not add players
-        game.setGameStatus(GameStatus.PREPARATION);
-
-        // the owner is also player in the game
-        Player owner = game.getOwner();
-        owner.setUser(currentUserService.getCurrentUser());
-        game.getPlayers().add(owner);
-        owner.setGame(game);
-
-        return gameRepository.save(game);
+        Game newGame = new Game(game, gameCode, currentUserService.getCurrentUser());
+        return gameRepository.save(newGame);
     }
 
     @Override
     public Game startGame(Long id) {
-        return gameRepository.findByIdAndGameStatus(id, GameStatus.PREPARATION)
+        return gameRepository.findById(id)
                 .map(game -> {
                     ensureGameOwnerService.ensureRequestedByGameOwner(game);
-                    game.setGameStatus(GameStatus.RUNNING);
                     List<MurderAssignment> murderAssignments = assignmentHelperService.generateKillAssignments(game);
-        game.setMurderAssignments(murderAssignments);
-        murderAssignmentNotificationService.pushMurderAssignments(murderAssignments);
+                    game.start(murderAssignments);
+                    murderAssignmentNotificationService.pushMurderAssignments(murderAssignments);
                     return gameRepository.save(game);
                 })
-                .orElseThrow(() -> new GameNotFoundException(id, GameStatus.PREPARATION));
+                .orElseThrow(() -> new GameNotFoundException(id));
     }
 
     @Override
     public Game endGame(Long id) {
-        return gameRepository.findByIdAndGameStatus(id, GameStatus.RUNNING)
+        return gameRepository.findById(id)
                 .map(game -> {
                     ensureGameOwnerService.ensureRequestedByGameOwner(game);
-                    game.setGameStatus(GameStatus.FINISHED);
+                    game.end();
                     gameEndedNotificationService.pushGameEnding(game);
         return gameRepository.save(game);})
-                .orElseThrow(() -> new GameNotFoundException(id, GameStatus.RUNNING));
+                .orElseThrow(() -> new GameNotFoundException(id));
     }
 
 }

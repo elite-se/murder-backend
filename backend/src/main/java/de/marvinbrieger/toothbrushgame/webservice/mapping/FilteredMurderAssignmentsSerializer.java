@@ -1,4 +1,4 @@
-package de.marvinbrieger.toothbrushgame.controller.mapping;
+package de.marvinbrieger.toothbrushgame.webservice.mapping;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import de.marvinbrieger.toothbrushgame.domain.ApplicationUser;
 import de.marvinbrieger.toothbrushgame.domain.MurderAssignment;
 import de.marvinbrieger.toothbrushgame.domain.MurderAssignmentStatus;
-import de.marvinbrieger.toothbrushgame.services.exceptions.UserNotFoundException;
+import de.marvinbrieger.toothbrushgame.exceptions.UserNotFoundException;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
