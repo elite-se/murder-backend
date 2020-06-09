@@ -14,11 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static de.marvinbrieger.toothbrushgame.security.SecurityConstants.*;
+import static de.marvinbrieger.toothbrushgame.security.SecurityConstants.HEADER_STRING;
+import static de.marvinbrieger.toothbrushgame.security.SecurityConstants.TOKEN_PREFIX;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
-    public JwtAuthorizationFilter(AuthenticationManager authManager) {
+    private final String secret;
+
+    public JwtAuthorizationFilter(AuthenticationManager authManager, String secret) {
         super(authManager);
+        this.secret = secret;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(HEADER_STRING);
         if (token == null) return null;
 
-        String user = JWT.require(Algorithm.HMAC512(SECRET))
+        String user = JWT.require(Algorithm.HMAC512(secret))
                 .build()
                 .verify(token.replace(TOKEN_PREFIX, ""))
                 .getSubject();

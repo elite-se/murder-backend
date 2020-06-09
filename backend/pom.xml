@@ -64,12 +64,9 @@
 			<version>3.10.1</version>
 		</dependency>
 		<dependency>
-			<!-- This dependency is bleeding edge, fetch it from the central maven repo once it is published there! -->
 			<groupId>io.github.jav</groupId>
 			<artifactId>expo-server-sdk</artifactId>
-			<version>0.4.4-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/libs/expo-server-sdk-0.4.4-SNAPSHOT.jar</systemPath>
+			<version>0.6.0</version>
 		</dependency>
 	</dependencies>
 
