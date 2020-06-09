@@ -21,10 +21,12 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static de.marvinbrieger.toothbrushgame.security.SecurityConstants.*;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private final String secret;
     private final AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, String secret) {
         this.authenticationManager = authenticationManager;
+        this.secret = secret;
         super.setFilterProcessesUrl(LOGIN_URL);
     }
 
@@ -54,7 +56,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = JWT.create()
                 .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .sign(HMAC512(SECRET));
+                .sign(HMAC512(secret));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
 }
