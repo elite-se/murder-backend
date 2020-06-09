@@ -1,5 +1,7 @@
 # murder-backend
 
+![CI](https://github.com/elite-se/murder-backend/workflows/CI/badge.svg)
+
 A backend application for organizing [assassin games](http://www.games-wiki.org/wiki/Assassin_game/). Look [here](https://github.com/elite-se/elite-se.murder-app) for the corresponding frontend app.
 
 ## Usage
