@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 class ExpoPushServiceImpl implements ExpoPushService {
     private static final Logger logger = LoggerFactory.getLogger(ExpoPushServiceImpl.class);
-    private PushClient pushClient;
+    private final PushClient pushClient;
 
     @Override
     public CompletableFuture<List<ExpoPushTicket>> sendMessagesAsync(Collection<ExpoPushMessage> messages) {
@@ -58,8 +58,8 @@ class ExpoPushServiceImpl implements ExpoPushService {
     }
 
     private static void logFailure(ExpoPushTicket expoPushTicket) {
-        if (!"ok".equalsIgnoreCase(expoPushTicket.status)) {
-            logger.info("Failed to deliver push message: ${}", expoPushTicket.message);
+        if (!"ok".equalsIgnoreCase(expoPushTicket.getStatus())) {
+            logger.info("Failed to deliver push message: ${}", expoPushTicket.getMessage());
         }
     }
 }
