@@ -158,7 +158,7 @@ public class Game {
      */
     public void start(List<MurderAssignment> assignments) {
         // check and update state
-        if (inPreparation())
+        if (!inPreparation())
             throw new GameInWrongStateException(GameStatus.PREPARATION, getGameStatus());
         setGameStatus(GameStatus.RUNNING);
 
