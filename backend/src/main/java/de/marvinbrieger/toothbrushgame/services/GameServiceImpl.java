@@ -11,6 +11,7 @@ import de.marvinbrieger.toothbrushgame.push.messagebuilders.GameEndedNotificatio
 import de.marvinbrieger.toothbrushgame.push.messagebuilders.MurderAssignmentNotificationService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.CurrentUserService;
 import de.marvinbrieger.toothbrushgame.services.interfaces.EnsureGameOwnerService;
+import de.marvinbrieger.toothbrushgame.services.interfaces.GameService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class GameServiceImpl implements de.marvinbrieger.toothbrushgame.services.interfaces.GameService {
+public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final GameCodeService gameCodeService;
     private final AssignmentGeneratorService assignmentHelperService;
