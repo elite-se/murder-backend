@@ -1,6 +1,8 @@
 package de.marvinbrieger.toothbrushgame.webservice;
 
 import de.marvinbrieger.toothbrushgame.services.interfaces.UserService;
+import de.marvinbrieger.toothbrushgame.utils.DbCleaningHelper;
+import de.marvinbrieger.toothbrushgame.utils.MurderApiContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -16,10 +18,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.web.context.WebApplicationContext;
 
-import org.springframework.transaction.annotation.Transactional;
+import javax.sql.DataSource;
 
 import static de.marvinbrieger.toothbrushgame.mocks.ApplicationUserMocks.ELIAS_DEVICE;
 import static de.marvinbrieger.toothbrushgame.mocks.ApplicationUserMocks.MARVINS_DEVICE;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Transactional
+@Commit
 @TestPropertySource("classpath:test.properties")
 @AutoConfigureMockMvc
 public class GameControllerTest {
@@ -43,30 +44,38 @@ public class GameControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    DataSource dataSource;
+
     private MockMvc mockMvc;
 
-    private ApiCallContext marvinContext;
+    private MurderApiContext marvinContext;
 
-    private ApiCallContext eliasContext;
+    private MurderApiContext eliasContext;
 
     @Before
     public void init() throws Exception {
+        DbCleaningHelper.truncateAllTables(dataSource.getConnection());
+
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
 
-        marvinContext = new ApiCallContext(mockMvc, MARVINS_DEVICE);
-        eliasContext = new ApiCallContext(mockMvc, ELIAS_DEVICE);
+        marvinContext = new MurderApiContext(mockMvc, MARVINS_DEVICE);
+        eliasContext = new MurderApiContext(mockMvc, ELIAS_DEVICE);
     }
 
     @Test
     public void testCreateGame() throws Exception {
-        JSONObject creationAnswer = marvinContext.performAndGetJson(post("/games")
-                .content(SOFTSKILL_GAME.toString()));
+        JSONObject game = marvinContext.createPost("/games")
+                .content(SOFTSKILL_GAME)
+                .send()
+                .getJsonAnswer();
 
-        String gameId = creationAnswer.getString("id");
-        JSONObject game = marvinContext.performAndGetJson(get("/games/" + gameId));
+        game = marvinContext.createGet("/games/" + game.getString("id"))
+                .send()
+                .getJsonAnswer();
 
         assertEquals("SE 14", game.getString("title"));
     }
@@ -74,16 +83,22 @@ public class GameControllerTest {
     @Test
     public void testJoinGame() throws Exception {
         // Arrange
-        JSONObject creationAnswer = marvinContext.performAndGetJson(post("/games")
-                .content(SOFTSKILL_GAME.toString()));
+        JSONObject game = marvinContext.createPost("/games")
+                .content(SOFTSKILL_GAME)
+                .send()
+                .getJsonAnswer();
 
         // Act
-        String gameId = creationAnswer.getString("id");
-        JSONObject player = marvinContext.performAndGetJson(post("/games/" + gameId + "/players")
-                .content(ELIAS_PLAYER.toString()));
+        JSONObject player = eliasContext.createPost("/games/" + game.getString("id") + "/players")
+                .content(ELIAS_PLAYER)
+                .send()
+                .getJsonAnswer();
+
+        game = eliasContext.createGet("/games/" + game.getString("id"))
+                .send()
+                .getJsonAnswer();
 
         // Assert
-        JSONObject game = marvinContext.performAndGetJson(get("/games/" + gameId));
         JSONArray playersArray = game.getJSONArray("players");
         boolean found = false;
         for (int k = 0; k < playersArray.length(); k++) {
