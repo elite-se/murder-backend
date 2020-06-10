@@ -48,8 +48,12 @@ public class Player {
         this(null, game, player.getPlayerName(), user, new LinkedList<>());
     }
 
+    public void setFailed() {
+        getCurrentAssignment().setAssignmentStatus(MurderAssignmentStatus.FAILED);
+    }
+
     @JsonIgnore
-    public MurderAssignment getCurrentAssignment() {
+    private MurderAssignment getCurrentAssignment() {
         return assignments.parallelStream()
                 .filter(assignment -> assignment.getAssignmentStatus() == MurderAssignmentStatus.PENDING)
                 .findFirst()

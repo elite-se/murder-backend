@@ -42,13 +42,12 @@ public class MurderAssignment {
         return assignmentStatus == MurderAssignmentStatus.PENDING;
     }
 
-
     public boolean hasSuccessor(MurderAssignment assignment) {
         return target.equals(assignment.killer) && assignment.isPending();
     }
 
     public void commitMurder() {
-        if (this.getAssignmentStatus() != MurderAssignmentStatus.PENDING)
+        if (!isPending())
             throw new MurderAssignmentNotFoundException(this.getId(), MurderAssignmentStatus.PENDING);
 
         Murder murder = new Murder(null, Instant.now(), this);
