@@ -19,13 +19,13 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player joinGame(Long gameId, Player player) {
-        Game gameToJoin = gameRepository.findById(gameId)
+        return gameRepository.findById(gameId)
+                .map(game -> {
+                    Player newPlayer = new Player(player, game, currentUserService.getCurrentUser());
+                    game.addPlayer(newPlayer);
+                    return playerRepository.save(newPlayer);
+                })
                 .orElseThrow(() -> new GameNotFoundException(gameId));
-
-        Player newPlayer = new Player(player, gameToJoin, currentUserService.getCurrentUser());
-        gameToJoin.addPlayer(newPlayer);
-
-        return playerRepository.save(player);
     }
 
 }

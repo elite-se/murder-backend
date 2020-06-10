@@ -68,6 +68,11 @@
 			<artifactId>expo-server-sdk</artifactId>
 			<version>0.6.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>4.0.4.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>
