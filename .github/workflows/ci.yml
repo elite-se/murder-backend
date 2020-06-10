@@ -19,11 +19,6 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    - uses: harmon758/postgresql-action@v1
-      with:
-        postgresql db: 'murdergame'
-        postgresql user: 'murdergame'
-        postgresql password: 'murdergame'
     - name: Compile, test and verify
       working-directory: ./backend
       run: ./mvnw -q -Dspring.datasource.url="jdbc:postgresql://localhost:5432/murdergame" -Dspring.datasource.username="murdergame" -Dspring.datasource.password="murdergame" verify
