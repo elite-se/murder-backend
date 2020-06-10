@@ -22,6 +22,7 @@ public class PlayerServiceImpl implements PlayerService {
         return gameRepository.findById(gameId)
                 .map(game -> {
                     Player newPlayer = new Player(player, game, currentUserService.getCurrentUser());
+                    game.addPlayer(newPlayer);
                     return playerRepository.save(newPlayer);
                 })
                 .orElseThrow(() -> new GameNotFoundException(gameId));
